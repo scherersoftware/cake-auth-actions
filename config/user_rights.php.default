@@ -1,0 +1,9 @@
+<?php
+// This is just a template file. Create a config with this format in our app/config directory
+$config = [
+	'user_rights' => [
+		'viewAllUsers' => [
+			User::ROLE_ADMIN
+		]
+	]
+];
