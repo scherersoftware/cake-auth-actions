@@ -11,7 +11,7 @@ class AuthHelper extends Helper {
 	public function __construct(\Cake\View\View $View, array $config = array()) {
 		parent::__construct($View, $config);
 
-		$this->_viewAuth = $this->_View->get('viewAuthActionds');
+		$this->_viewAuth = $this->_View->get('viewAuthActions');
 	}
 
 /**
@@ -63,7 +63,6 @@ class AuthHelper extends Helper {
  */	
 	public function urlAllowed($url) {
 		if($this->_viewAuth) {
-			return true;
 			return $this->_viewAuth['AuthActions']->urlAllowed($this->user(), $url);
 		}
 		return false;
