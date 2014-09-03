@@ -1,6 +1,8 @@
 <?php
 namespace AuthActions\Lib;
 use \Cake\Core\Configure;
+use Cake\Event\EventManager;
+
 
 trait AuthActionsTrait {
 	
@@ -13,6 +15,24 @@ trait AuthActionsTrait {
  * @var UserRights
  */	
 	protected $_UserRights;
+
+	public function initAuthActions() {
+		EventManager::instance()->attach(function(\Cake\Event\Event $event) {
+			// Make the AuthComponent, AuthActions and UserRights available to the view.
+			// FIXME - find a clean way to do this
+			if(!$event->subject() instanceof \Cake\Controller\ErrorController) {
+				$viewAuthActions = [
+					'AuthActions' => $event->subject()->getAuthActions(),
+					'UserRights' => $event->subject()->getUserRights()
+				];
+				$event->subject()->set('viewAuthActions', $viewAuthActions);
+			}
+		}, 'Controller.beforeRender');
+		
+		if($this->getAuthActions()->isPublicAction($this->request->params['plugin'], $this->request->params['controller'], $this->request->params['action'])) {
+			$this->Auth->allow();
+		}
+	}
 
 	public function getAuthActions() {
 		if(!$this->_AuthActions) {
@@ -45,12 +65,6 @@ trait AuthActionsTrait {
 			$this->_UserRights = new UserRights($rightsConfig);
 		}
 		return $this->_UserRights;
-	}
-
-	public function initAuthActions() {
-		if($this->getAuthActions()->isPublicAction($this->request->params['plugin'], $this->request->params['controller'], $this->request->params['action'])) {
-			$this->Auth->allow();
-		}
 	}
 
 	public function isAuthorized($user) {

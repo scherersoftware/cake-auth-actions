@@ -2,16 +2,28 @@
 namespace AuthActions\View\Helper;
 use Cake\View\Helper;
 
-class AuthHelper extends AppHelper {
+class AuthHelper extends Helper {
+
+	public $sessionKey = 'Auth.User';
+	protected $_viewAuth;
+	public $helpers = ['Session'];
+	
+	public function __construct(\Cake\View\View $View, array $config = array()) {
+		parent::__construct($View, $config);
+
+		$this->_viewAuth = $this->_View->get('viewAuthActionds');
+	}
 
 /**
  * whether the user is logged in
  *
  * @return bool
  */
-	public function isLoggedIn() {
-		$auth = ClassRegistry::getObject('AuthComponent');
-		return $auth->loggedIn();
+	public function loggedIn() {
+		if($this->_viewAuth) {
+			return $this->_viewAuth['AuthComponent']->user() !== null;
+		}
+		return false;
 	}
 
 /**
@@ -21,8 +33,15 @@ class AuthHelper extends AppHelper {
  * @return mixed
  */
 	public function user($key = null) {
-		$auth = ClassRegistry::getObject('AuthComponent');
-		return $auth->user($key);
+		if ($this->sessionKey && $this->Session->check($this->sessionKey)) {
+			$user = $this->Session->read($this->sessionKey);
+		} else {
+			return null;
+		}
+		if ($key === null) {
+			return $user;
+		}
+		return Hash::get($user, $key);
 	}
 
 /**
@@ -32,8 +51,10 @@ class AuthHelper extends AppHelper {
  * @return bool
  */
 	public function hasRight($right) {
-		$auth = ClassRegistry::getObject('AuthComponent');	
-		return $auth->hasRight($right);
+		if($this->_viewAuth) {
+			return $this->_viewAuth['UserRights']->userHasRight($this->user(), $right);
+		}
+		return false;
 	}
 
 /**
@@ -41,7 +62,10 @@ class AuthHelper extends AppHelper {
  * @return bool
  */	
 	public function urlAllowed($url) {
-		$auth = ClassRegistry::getObject('AuthComponent');
-		return $auth->urlAllowed($url);
+		if($this->_viewAuth) {
+			return true;
+			return $this->_viewAuth['AuthActions']->urlAllowed($this->user(), $url);
+		}
+		return false;
 	}
 }

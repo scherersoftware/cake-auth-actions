@@ -2,6 +2,7 @@
 namespace AuthActions\Lib;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
+use Cake\Utility\Hash;
 
 class AuthActions {
 
