@@ -1,13 +1,22 @@
 <?php
 namespace AuthActions\View\Helper;
+
 use Cake\View\Helper;
 
 class AuthHelper extends Helper {
 
 	public $sessionKey = 'Auth.User';
+
 	protected $_viewAuth;
+
 	public $helpers = ['Session'];
-	
+
+/**
+ * Configures the instance
+ *
+ * @param View $View CakePHP view object
+ * @param array $config helper config
+ */
 	public function __construct(\Cake\View\View $View, array $config = array()) {
 		parent::__construct($View, $config);
 
@@ -20,7 +29,7 @@ class AuthHelper extends Helper {
  * @return bool
  */
 	public function loggedIn() {
-		if($this->_viewAuth) {
+		if ($this->_viewAuth) {
 			return $this->_viewAuth['AuthComponent']->user() !== null;
 		}
 		return false;
@@ -29,7 +38,7 @@ class AuthHelper extends Helper {
 /**
  * Accessor to the logged in user's properties
  *
- * @param string $key 
+ * @param string $key Key to read
  * @return mixed
  */
 	public function user($key = null) {
@@ -47,22 +56,24 @@ class AuthHelper extends Helper {
 /**
  * Returns whether the user has the given $right
  *
- * @param string $right 
+ * @param string $right name of right
  * @return bool
  */
 	public function hasRight($right) {
-		if($this->_viewAuth) {
+		if ($this->_viewAuth) {
 			return $this->_viewAuth['UserRights']->userHasRight($this->user(), $right);
 		}
 		return false;
 	}
 
 /**
- * @param string|array $url 
+ * Checks whether the URL is allowed for the currently logged in user
+ *
+ * @param string|array $url url to check
  * @return bool
- */	
+ */
 	public function urlAllowed($url) {
-		if($this->_viewAuth) {
+		if ($this->_viewAuth) {
 			return $this->_viewAuth['AuthActions']->urlAllowed($this->user(), $url);
 		}
 		return false;
