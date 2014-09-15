@@ -90,7 +90,7 @@ trait AuthActionsTrait {
  */
 	public function isAuthorized($user) {
 		return $this->getAuthActions()->isAuthorized(
-			$this->Auth->user()
+			$this->Auth->user(),
 			$this->request->params['plugin'],
 			$this->request->params['controller'],
 			$this->request->params['action']
