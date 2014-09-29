@@ -2,6 +2,7 @@
 namespace AuthActions\View\Helper;
 
 use Cake\View\Helper;
+use Cake\Utility\Hash;
 
 class AuthHelper extends Helper {
 
