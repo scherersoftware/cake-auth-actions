@@ -30,14 +30,25 @@ class AuthActions {
 	protected $_publicActions = [];
 
 /**
+ * Options
+ *
+ * @var array
+ */
+	protected $_options = [
+		'camelizedControllerNames' => false
+	];
+
+/**
  * Constructor
  *
  * @param array $rightsConfig The controller-actions/rights configuration
- * @param array $publicActions public actions
+ * @param array $publicActions Public actions
+ * @param array $options Additional options
  */
-	public function __construct(array $rightsConfig, array $publicActions) {
+	public function __construct(array $rightsConfig, array $publicActions, array $options = []) {
 		$this->_rightsConfig = $rightsConfig;
 		$this->_publicActions = $publicActions;
+		$this->_options = Hash::merge($this->_options, $options);
 	}
 
 /**
@@ -59,7 +70,11 @@ class AuthActions {
 		if ($this->isPublicAction($plugin, $controller, $action)) {
 			$isAuthorized = true;
 		} elseif (isset($user['role']) && !empty($controller) && !empty($action)) {
-			$controller = Inflector::underscore($controller);
+			if ($this->_options['camelizedControllerNames']) {
+				$controller = Inflector::camelize($controller);
+			} else {
+				$controller = Inflector::underscore($controller);
+			}
 
 			$key = $controller;
 			if (!empty($plugin)) {
@@ -69,10 +84,10 @@ class AuthActions {
 			if (isset($this->_rightsConfig[$key]['*']) && $this->_rightsConfig[$key]['*'] == '*') {
 				$isAuthorized = true;
 			} elseif (isset($this->_rightsConfig[$key]['*'])
-				&& in_array($user['role'], $this->_rightsConfig[$key]['*'])) {
+			&& in_array($user['role'], $this->_rightsConfig[$key]['*'])) {
 				$isAuthorized = true;
 			} elseif (isset($this->_rightsConfig[$key][$action])
-					&& in_array($user['role'], $this->_rightsConfig[$key][$action])) {
+				&& in_array($user['role'], $this->_rightsConfig[$key][$action])) {
 
 				$isAuthorized = true;
 			}
