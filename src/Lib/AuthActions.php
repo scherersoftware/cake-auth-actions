@@ -104,7 +104,11 @@ class AuthActions {
  * @return bool
  */
 	public function isPublicAction($plugin, $controller, $action) {
-		$controller = Inflector::underscore($controller);
+		if ($this->_options['camelizedControllerNames']) {
+			$controller = Inflector::camelize($controller);
+		} else {
+			$controller = Inflector::underscore($controller);
+		}
 		$key = ($plugin ? $plugin . '.' : '') . $controller;
 
 		$isPublic = false;
