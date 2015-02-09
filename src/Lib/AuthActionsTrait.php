@@ -53,7 +53,7 @@ trait AuthActionsTrait {
 			$actionConfig = Configure::read('auth_actions');
 			$publicActionsConfig = Configure::read('public_actions');
 			$options = Configure::read('auth_settings');
-			if(!is_array($options)) {
+			if (!is_array($options)) {
 				$options = [];
 			}
 			if (!is_array($publicActionsConfig)) {
