@@ -10,8 +10,6 @@ class AuthHelper extends Helper {
 
 	protected $_viewAuth;
 
-	public $helpers = ['Session'];
-
 /**
  * Configures the instance
  *
@@ -43,8 +41,8 @@ class AuthHelper extends Helper {
  * @return mixed
  */
 	public function user($key = null) {
-		if ($this->sessionKey && $this->Session->check($this->sessionKey)) {
-			$user = $this->Session->read($this->sessionKey);
+		if ($this->sessionKey && $this->request->session()->check($this->sessionKey)) {
+			$user = $this->request->session()->read($this->sessionKey);
 		} else {
 			return null;
 		}
