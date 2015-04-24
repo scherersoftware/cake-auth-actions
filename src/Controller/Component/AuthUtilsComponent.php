@@ -9,7 +9,7 @@ use Cake\Utility\Hash;
 class AuthUtilsComponent extends Component
 {
     public $components = ['Cookie', 'Auth', 'Flash'];
-    
+
     /**
      * Add a Remeber me cookie
      *
@@ -24,8 +24,8 @@ class AuthUtilsComponent extends Component
             'httpOnly' => true,
             'secure' => false
         ], $options);
-        
-        $this->Cookie->config([$options]);
+
+        $this->Cookie->config($options);
         $this->Cookie->write('User.id', $userId);
     }
 
@@ -41,8 +41,12 @@ class AuthUtilsComponent extends Component
     public function checkRemeberMeCookie()
     {
         if (!$this->Auth->user() && $this->Cookie->read('User.id')) {
-            $user = TableRegistry::get('Users')->get($this->Cookie->read('User'))->toArray();
+            $repository = 'Users';
+            if (!empty($this->Auth->config('authenticate.Form.repository'))) {
+                $repository = $this->Auth->config('authenticate.Form.repository');
+            }
+            $user = TableRegistry::get($repository)->get($this->Cookie->read('User'))->toArray();
             $this->Auth->setUser($user);
         }
     }
-} 
+}
