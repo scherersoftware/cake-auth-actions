@@ -29,6 +29,10 @@ class AuthUtilsComponent extends Component
         $this->Cookie->write('User.id', $userId);
     }
 
+    public function destroyRememberMeCookie() {
+        $this->Cookie->delete('User');
+    }
+
     /**
      * Check if a remeber me cookie exists and login the user
      *
