@@ -8,7 +8,7 @@ use Cake\Utility\Hash;
 
 class AuthUtilsComponent extends Component
 {
-    public $components = ['Cookie', 'Auth', 'Flash'];
+    public $components = ['Cookie', 'Auth'];
 
     /**
      * Add a Remeber me cookie
@@ -17,7 +17,7 @@ class AuthUtilsComponent extends Component
      * @param string $options Options array for the cookie config
      * @return void
      */
-    public function addRemeberMeCookie($userId, $options = [])
+    public function addRememberMeCookie($userId, $options = [])
     {
         $options = Hash::merge([
             'expires' => '+14 days',
@@ -29,24 +29,36 @@ class AuthUtilsComponent extends Component
         $this->Cookie->write('User.id', $userId);
     }
 
-    public function destroyRememberMeCookie() {
+    /**
+     * Deletes the remember me cookie
+     *
+     * @return void
+     */
+    public function destroyRememberMeCookie()
+    {
         $this->Cookie->delete('User');
     }
 
     /**
      * Check if a remeber me cookie exists and login the user
      *
-     * @return void
+     * @return mixed User ID on success, false if no valid cookie
      */
-    public function checkRemeberMeCookie()
+    public function checkRememberMeCookie()
     {
-        if (!$this->Auth->user() && $this->Cookie->read('User.id')) {
-            $repository = 'Users';
-            if (!empty($this->Auth->config('authenticate.Form.repository'))) {
-                $repository = $this->Auth->config('authenticate.Form.repository');
-            }
-            $user = TableRegistry::get($repository)->get($this->Cookie->read('User'))->toArray();
-            $this->Auth->setUser($user);
+        if (!$this->loggedIn() && $this->Cookie->read('User.id')) {
+            return $this->Cookie->read('User.id');
         }
+        return false;
+    }
+
+    /**
+     * Determines if the user is logged in
+     *
+     * @return bool
+     */
+    public function loggedIn()
+    {
+        return $this->Auth->user() !== null;
     }
 }
