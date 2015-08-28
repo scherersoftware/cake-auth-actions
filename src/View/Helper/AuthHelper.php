@@ -29,7 +29,7 @@ class AuthHelper extends Helper {
  */
 	public function loggedIn() {
 		if ($this->_viewAuth) {
-			return $this->_viewAuth['AuthComponent']->user() !== null;
+			return $this->sessionKey && $this->request->session()->check($this->sessionKey);
 		}
 		return false;
 	}
