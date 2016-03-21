@@ -1,4 +1,4 @@
-cake-auth-actions
+CakePHP 3 cake-auth-actions
 ====================================
 
 A simple, configuration based ACL alternative for CakePHP 3. Allows you to define specific access rights to controller actions for different kinds of users.
