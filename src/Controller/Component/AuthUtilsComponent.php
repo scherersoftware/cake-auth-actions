@@ -1,7 +1,7 @@
 <?php
 namespace AuthActions\Controller\Component;
 
-use AuthActions\Lib\AutoLogin;
+use AuthActions\Lib\AutoLoginableInterface;
 use Cake\Controller\Component;
 use Cake\Controller\Component\CookieComponent;
 use Cake\Datasource\EntityInterface;
@@ -73,11 +73,9 @@ class AuthUtilsComponent extends Component
      * Attempts to auto login a user and returns a redirect on success.
      *
      * @param \Cake\Datasource\EntityInterface $user User
-     * @param string                           $key  Seurity key (should be user specific)
-     * @param string                           $salt Security salt (should be user specific)
      * @return \Cake\Http\Response|null
      */
-    public function autoLogin(EntityInterface $user, string $key, string $salt): ?Response
+    public function autoLogin(AutoLoginableInterface $user): ?Response
     {
         $controller = $this->getController();
         $request = $controller->request;
@@ -85,17 +83,18 @@ class AuthUtilsComponent extends Component
         if (empty($token)) {
             return null;
         }
-        $controller->Auth->logout();
-        $tokenData = AutoLogin::validateLoginToken($token, $key, $salt);
+
+        $this->Auth->logout();
+        $tokenData = $user->validateLoginToken($token, $user->getKey(), $user->getSalt());
         if (!is_array($tokenData)) {
             return null;
         }
         if (!empty($tokenData['addRememberMeCookie']) && $tokenData['addRememberMeCookie']) {
-            $controller->AuthUtils->addRememberMeCookie($user->id);
+            $this->addRememberMeCookie($user->id);
         }
         $userData = $user->toArray();
         $userData['user'] = $user;
-        $controller->Auth->setUser($userData);
+        $this->Auth->setUser($userData);
         if (!empty($tokenData['url'])) {
             return $controller->redirect($tokenData['url']);
         }
