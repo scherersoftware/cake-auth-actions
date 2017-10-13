@@ -3,7 +3,7 @@
 namespace AuthActions\Lib;
 
 
-class AutoLoginTrait
+trait AutoLoginTrait
 {
     /**
      * Returns a full auto login url with token.
