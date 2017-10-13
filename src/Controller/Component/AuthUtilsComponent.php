@@ -5,6 +5,10 @@ namespace AuthActions\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
 
+/**
+ * @property \Cake\Controller\Component\CookieComponent $Cookie
+ * @property \Cake\Controller\Component\AuthComponent $Auth
+ */
 class AuthUtilsComponent extends Component
 {
     /**
@@ -15,13 +19,13 @@ class AuthUtilsComponent extends Component
     public $components = ['Cookie', 'Auth'];
 
     /**
-     * Add a Remeber me cookie
+     * Add a Remember me cookie
      *
      * @param string $userId UserID
-     * @param string $options Options array for the cookie config
+     * @param array $options Options array for the cookie config
      * @return void
      */
-    public function addRememberMeCookie(string $userId, string $options = []): void
+    public function addRememberMeCookie(string $userId, array $options = []): void
     {
         $options = Hash::merge([
             'expires' => '+14 days',

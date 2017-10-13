@@ -135,9 +135,9 @@ class AuthActions
      *
      * @param array $user user to check with
      * @param array|string $url url to check
-     * @return void
+     * @return bool
      */
-    public function urlAllowed(array $user, $url): void
+    public function urlAllowed(array $user, $url): bool
     {
         if (empty($url)) {
             return false;
