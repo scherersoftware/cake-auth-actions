@@ -1,13 +1,17 @@
 <?php
+declare(strict_types = 1);
 namespace AuthActions\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Controller\Component\CookieComponent;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 class AuthUtilsComponent extends Component
 {
+    /**
+     * Used Components
+     *
+     * @var array
+     */
     public $components = ['Cookie', 'Auth'];
 
     /**
@@ -17,7 +21,7 @@ class AuthUtilsComponent extends Component
      * @param string $options Options array for the cookie config
      * @return void
      */
-    public function addRememberMeCookie($userId, $options = [])
+    public function addRememberMeCookie(string $userId, string $options = []): void
     {
         $options = Hash::merge([
             'expires' => '+14 days',
@@ -34,7 +38,7 @@ class AuthUtilsComponent extends Component
      *
      * @return void
      */
-    public function destroyRememberMeCookie()
+    public function destroyRememberMeCookie(): void
     {
         $this->Cookie->delete('User');
     }
@@ -49,6 +53,7 @@ class AuthUtilsComponent extends Component
         if (!$this->loggedIn() && $this->Cookie->read('User.id')) {
             return $this->Cookie->read('User.id');
         }
+
         return false;
     }
 
@@ -57,7 +62,7 @@ class AuthUtilsComponent extends Component
      *
      * @return bool
      */
-    public function loggedIn()
+    public function loggedIn(): bool
     {
         return $this->Auth->user() !== null;
     }

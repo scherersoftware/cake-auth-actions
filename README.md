@@ -1,6 +1,7 @@
 #CakePHP 3 cake-auth-actions
 
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Build Status](https://travis-ci.org/m0rth1um/cake-auth-actions.svg?branch=master)](https://travis-ci.org/m0rth1um/cake-auth-actions)
 
 A simple, configuration based ACL alternative for CakePHP 3. Allows you to define specific access rights to controller actions for different kinds of users.
 

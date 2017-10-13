@@ -7,10 +7,13 @@
     	"installer-name": "AuthActions"
 	},
 	"require": {
-		"cakephp/plugin-installer": "*"
+		"cakephp/plugin-installer": "*",
+		"cakephp/cakephp": "~3.4"
 	},
 	"require-dev": {
-		"cakephp/cakephp": "3.0.x-dev"
+		"phpunit/phpunit": "^6.4",
+		"cakephp/cakephp-codesniffer": "^3.0",
+		"scherersoftware/coding-standard": "^3.0"
 	},
 	"autoload": {
 		"psr-4": {
