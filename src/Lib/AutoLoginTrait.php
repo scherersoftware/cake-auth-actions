@@ -61,6 +61,7 @@ trait AutoLoginTrait
                 return null;
             }
         }
+
         return $data;
     }
 
@@ -90,7 +91,7 @@ trait AutoLoginTrait
     }
 
     /**
-     * Returns the key for the auto login url
+     * Returns the key for the auto login url encryption
      *
      * @return string
      * @throws \Exception
@@ -101,7 +102,7 @@ trait AutoLoginTrait
     }
 
     /**
-     * Returns the salt for the auto login url
+     * Returns the salt for the auto login url encryption
      *
      * @return string
      * @throws \Exception
