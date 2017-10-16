@@ -2,6 +2,7 @@
 
 namespace AuthActions\Lib;
 
+use Cake\Core\Configure;
 use Cake\I18n\Time;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
@@ -16,7 +17,7 @@ trait AutoLoginTrait
      * @param string     $expireInterval      When this token expires
      * @param bool       $addRememberMeCookie Enabling setting the remember me cookie on auto login
      * @return string
-     * @throws \Exception
+     * @throws \Exception If the generated URL is too long for browsers
      */
     public function getAutoLoginUrl(
         array $autoUrl,
@@ -109,6 +110,6 @@ trait AutoLoginTrait
      */
     public function getSalt(): string
     {
-        return $this->user_salt;
+        return Configure::read('auto_login.salt');
     }
 }

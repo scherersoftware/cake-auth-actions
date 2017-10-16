@@ -1,7 +1,6 @@
 <?php
 namespace AuthActions\Controller\Component;
 
-use AuthActions\Lib\AutoLoginableInterface;
 use Cake\Controller\Component;
 use Cake\Controller\Component\CookieComponent;
 use Cake\Datasource\EntityInterface;
@@ -75,7 +74,7 @@ class AuthUtilsComponent extends Component
      * @param \Cake\Datasource\EntityInterface $user User
      * @return \Cake\Http\Response|null
      */
-    public function autoLogin(AutoLoginableInterface $user): ?Response
+    public function autoLogin(EntityInterface $user): ?Response
     {
         $controller = $this->getController();
         $request = $controller->request;
