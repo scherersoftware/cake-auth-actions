@@ -10,11 +10,18 @@
 		"cakephp/plugin-installer": "*"
 	},
 	"require-dev": {
-		"cakephp/cakephp": "3.0.x-dev"
+		"cakephp/cakephp": "3.4.*",
+        "phpunit/phpunit": "*"
 	},
 	"autoload": {
 		"psr-4": {
-		"AuthActions\\": "src"
+		    "AuthActions\\": "src"
 		}
-	}
+	},
+    "autoload-dev": {
+        "psr-4": {
+            "AuthActions\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
 }
