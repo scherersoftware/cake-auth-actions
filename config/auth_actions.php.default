@@ -22,6 +22,6 @@ $config = [
 		]
 	],
 	'auto_login' => [
-	    'salt' =>
+	    'salt' => 'YOUR_SALT_HERE'
 	]
 ];

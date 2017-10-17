@@ -110,6 +110,10 @@ trait AutoLoginTrait
      */
     public function getSalt(): string
     {
+        if (Configure::load('auth_actions') === false) {
+            trigger_error('UserRights: Could not load config/user_rights.php', E_USER_WARNING);
+        }
+
         return Configure::read('auto_login.salt');
     }
 }
