@@ -95,7 +95,6 @@ trait AutoLoginTrait
      * Returns the key for the auto login url encryption
      *
      * @return string
-     * @throws \Exception
      */
     public function getKey(): string
     {
