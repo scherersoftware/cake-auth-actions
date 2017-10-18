@@ -10,8 +10,18 @@ use Cake\Http\Response;
 
 class AuthUtilsComponent extends Component
 {
+    /**
+     * Required components
+     *
+     * @var array
+     */
     public $components = ['Cookie', 'Auth'];
 
+    /**
+     * Default configuration
+     *
+     * @var array
+     */
     protected $_defaultConfig = [
         'defaultRedirect' => '/'
     ];

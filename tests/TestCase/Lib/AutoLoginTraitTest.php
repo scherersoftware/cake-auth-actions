@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AuthActions\Test\TestCase\Lib;
 
@@ -66,9 +67,8 @@ class AutoLoginTraitTest extends TestCase
         $expiredValidationResult = $userToTest->validateLoginToken($expiredToken);
         $inValidationResult = $userToTest->validateLoginToken($invalidToken);
 
-        $this->assertSame($validValidationResult['url'], $url);
+        $this->assertSame($url, $validValidationResult['url']);
         $this->assertNull($expiredValidationResult);
         $this->assertNull($inValidationResult);
     }
-
 }
