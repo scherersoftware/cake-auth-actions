@@ -20,5 +20,8 @@ $config = [
 		'my_account' => [
 			'*' => '*'
 		]
+	],
+	'auto_login' => [
+	    'salt' => 'YOUR_SALT_HERE'
 	]
 ];

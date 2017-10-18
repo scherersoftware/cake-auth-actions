@@ -3,12 +3,28 @@ namespace AuthActions\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\Component\CookieComponent;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use Cake\Http\Response;
 
 class AuthUtilsComponent extends Component
 {
+    /**
+     * Required components
+     *
+     * @var array
+     */
     public $components = ['Cookie', 'Auth'];
+
+    /**
+     * Default configuration
+     *
+     * @var array
+     */
+    protected $_defaultConfig = [
+        'defaultRedirect' => '/'
+    ];
 
     /**
      * Add a Remeber me cookie
@@ -60,5 +76,38 @@ class AuthUtilsComponent extends Component
     public function loggedIn()
     {
         return $this->Auth->user() !== null;
+    }
+
+    /**
+     * Attempts to auto login a user and returns a redirect on success.
+     *
+     * @param \Cake\Datasource\EntityInterface $user User
+     * @return \Cake\Http\Response|null
+     */
+    public function autoLogin(EntityInterface $user): ?Response
+    {
+        $controller = $this->getController();
+        $request = $controller->request;
+        $token = $request->getQuery('t');
+        if (empty($token)) {
+            return null;
+        }
+
+        $this->Auth->logout();
+        $tokenData = $user->validateLoginToken($token, $user->getKey(), $user->getSalt());
+        if (!is_array($tokenData)) {
+            return null;
+        }
+        if (!empty($tokenData['addRememberMeCookie']) && $tokenData['addRememberMeCookie']) {
+            $this->addRememberMeCookie($user->id);
+        }
+        $userData = $user->toArray();
+        $userData['user'] = $user;
+        $this->Auth->setUser($userData);
+        if (!empty($tokenData['url'])) {
+            return $controller->redirect($tokenData['url']);
+        }
+
+        return $controller->redirect($this->getConfig('defaultRedirect'));
     }
 }
