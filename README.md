@@ -9,7 +9,7 @@ A simple, configuration based ACL alternative for CakePHP 3. Allows you to defin
 #### 1. require the plugin in your `composer.json`
 
 		"require": {
-			"codekanzlei/cake-auth-actions": "dev-master",
+			"codekanzlei/cake-auth-actions": "dev-master"
 		}
 
 #### 2. Include the plugin using composer
@@ -57,7 +57,8 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 			
 			// namespace declaration of AuthUtilsComponent
 			'AuthActions.AuthUtils'
-		];
+		]
+	];
   
 **beforeFilter():**
 
