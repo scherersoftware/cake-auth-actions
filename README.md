@@ -31,12 +31,6 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 
 	use \AuthActions\Lib\AuthActionsTrait;
 
-**$helpers:**
-
-	public $helpers = [
-		'Auth' => ['className' => 'AuthActions.Auth']
-	];
-
 **$components:**	
 
 	public $components = [
@@ -65,9 +59,20 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 	public function beforeFilter(\Cake\Event\Event $event)
 	{
 		$this->initAuthActions();
-	}	
+	}
+	
+#### 2. Configure `AppView.php`
 
-#### 2. Create additional files
+**initialize():**
+
+    public function initialize()
+    {
+        $this->loadHelper('Auth', [
+            'className' => 'AuthActions.Auth'
+        ]);
+    }
+
+#### 3. Create additional files
 In your project's `config` folder, create the required config files. 
 
 **Note:** For reference, see these files:
