@@ -35,7 +35,7 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 
 	public $helpers = [
 		'Auth' => ['className' => 'AuthActions.Auth']
-	]
+	];
 
 **$components:**	
 
@@ -57,7 +57,7 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 			
 			// namespace declaration of AuthUtilsComponent
 			'AuthActions.AuthUtils'
-		]
+		];
   
 **beforeFilter():**
 
