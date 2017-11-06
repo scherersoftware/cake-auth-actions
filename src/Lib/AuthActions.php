@@ -90,6 +90,20 @@ class AuthActions {
 				&& in_array($user['role'], $this->_rightsConfig[$key][$action])) {
 
 				$isAuthorized = true;
+			} elseif (isset($this->_rightsConfig[$key][$action])) {
+				foreach ($this->_rightsConfig[$key][$action] as $value) {
+				    if (is_array($value)) {
+					$valid = true;
+					foreach ($value as $path => $pathValue) {
+					    if ($pathValue !== Hash::get($user, $path)) {
+						$valid = false;
+						break;
+					    }
+					}
+
+					$isAuthorized = $valid;
+				    }
+				}
 			}
 		}
 		return $isAuthorized;
