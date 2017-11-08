@@ -81,33 +81,57 @@ class AuthActions {
 				$key = $plugin . '.' . $key;
 			}
 
-			if (isset($this->_rightsConfig[$key]['*']) && $this->_rightsConfig[$key]['*'] == '*') {
-				$isAuthorized = true;
-			} elseif (isset($this->_rightsConfig[$key]['*'])
-			&& in_array($user['role'], $this->_rightsConfig[$key]['*'])) {
-				$isAuthorized = true;
-			} elseif (isset($this->_rightsConfig[$key][$action])
-				&& in_array($user['role'], $this->_rightsConfig[$key][$action])) {
-
-				$isAuthorized = true;
-			} elseif (isset($this->_rightsConfig[$key][$action])) {
-				foreach ($this->_rightsConfig[$key][$action] as $value) {
-				    if (is_array($value)) {
-                        $valid = true;
-                        foreach ($value as $path => $pathValue) {
-                            if (!in_array(Hash::get($user, $path), $pathValue)) {
-                                $valid = false;
-                                break;
-                            }
-                        }
-
-                        $isAuthorized = $valid;
-				    }
-				}
-			}
+            $isAuthorized = $this->_isActionAuthorized($user, $this->_rightsConfig[$key], $action);
 		}
 		return $isAuthorized;
 	}
+
+/**
+ * Checks whether the user has access to the given action for the given configuration
+ *
+ * @param array  $user   user to check
+ * @param array  $config rights configuration
+ * @param string $action action
+ * @return bool
+ */
+    protected function _isActionAuthorized($user, $config, $action)
+    {
+        $permissions = [];
+
+        if (isset($config['*'])) {
+            $permissions = $config['*'];
+        } elseif (isset($config[$action])) {
+            $permissions = $config[$action];
+        }
+
+        if ($permissions === '*') {
+            return true;
+        }
+
+        if (in_array($user['role'], $permissions)) {
+            return true;
+        }
+
+        foreach ($permissions as $key => $permission) {
+            if (is_array($permission)) {
+                foreach ($permission as $path => $pathValue) {
+                    if (!in_array(Hash::get($user, $path), $pathValue)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            if (is_string($key)
+                && is_array($permission)
+                && in_array(Hash::get($user, $key), $permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 /**
  * Checks if the given plugin/controller/action combination is configured to be public
