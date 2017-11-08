@@ -93,15 +93,15 @@ class AuthActions {
 			} elseif (isset($this->_rightsConfig[$key][$action])) {
 				foreach ($this->_rightsConfig[$key][$action] as $value) {
 				    if (is_array($value)) {
-					$valid = true;
-					foreach ($value as $path => $pathValue) {
-					    if ($pathValue !== Hash::get($user, $path)) {
-						$valid = false;
-						break;
-					    }
-					}
+                        $valid = true;
+                        foreach ($value as $path => $pathValue) {
+                            if (!in_array(Hash::get($user, $path), $pathValue)) {
+                                $valid = false;
+                                break;
+                            }
+                        }
 
-					$isAuthorized = $valid;
+                        $isAuthorized = $valid;
 				    }
 				}
 			}
