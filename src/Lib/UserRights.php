@@ -1,12 +1,14 @@
 <?php
 namespace AuthActions\Lib;
 
+use Cake\Utility\Hash;
+
 class UserRights {
 
 /**
  * Holds the rights config.
- * 
- * Format: 
+ *
+ * Format:
  * 		'userCanDoStuff' => array(
  * 			role1, role2
  * 		),
@@ -21,7 +23,7 @@ class UserRights {
 /**
  * Constructor
  *
- * @param array $rightsConfig The rights configuration 
+ * @param array $rightsConfig The rights configuration
  */
 	public function __construct(array $rightsConfig) {
 		$this->_rightsConfig = $rightsConfig;
@@ -35,12 +37,9 @@ class UserRights {
  * @return bool
  */
 	public function userHasRight(array $user, $right) {
-		$hasRight = false;
-		if (isset($user['role']) && !empty($right) && isset($this->_rightsConfig[$right])) {
-			if (in_array($user['role'], $this->_rightsConfig[$right])) {
-				$hasRight = true;
-			}
-		}
-		return $hasRight;
+		if (isset($this->_rightsConfig[$right])) {
+            return AuthActions::isUserAuthorized($user, $this->_rightsConfig, $right);
+        }
+		return false;
 	}
 }
