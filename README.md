@@ -1,7 +1,7 @@
 #CakePHP 3 cake-auth-actions
 
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
-
+[![Build Status](https://travis-ci.org/scherersoftware/cake-auth-actions.svg?branch=master)](https://travis-ci.org/scherersoftware/cake-auth-actions)
 A simple, configuration based ACL alternative for CakePHP 3. Allows you to define specific access rights to controller actions for different kinds of users.
 
 ## Installation
@@ -16,7 +16,7 @@ A simple, configuration based ACL alternative for CakePHP 3. Allows you to defin
 Open a terminal in your project-folder and run these commands:
 
 	$ composer update
-	
+
 #### 3. Load the plugin in your `config/bootstrap.php`
 
 	Plugin::load('AuthActions', ['bootstrap' => false, 'routes' => false]);
@@ -31,7 +31,7 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 
 	use \AuthActions\Lib\AuthActionsTrait;
 
-**$components:**	
+**$components:**
 
 	public $components = [
 		'Auth' => [
@@ -48,19 +48,19 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 			'loginRedirect' => [], // redirect after successful login
 			'logoutRedirect' => [], // redirect after successful logout
 			'authError' => 'PERMISSION_DENIED',
-			
+
 			// namespace declaration of AuthUtilsComponent
 			'AuthActions.AuthUtils'
 		]
 	];
-  
+
 **beforeFilter():**
 
 	public function beforeFilter(\Cake\Event\Event $event)
 	{
 		$this->initAuthActions();
 	}
-	
+
 #### 2. Configure `AppView.php`
 
 **initialize():**
@@ -73,7 +73,7 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
     }
 
 #### 3. Create additional files
-In your project's `config` folder, create the required config files. 
+In your project's `config` folder, create the required config files.
 
 **Note:** For reference, see these files:
 
@@ -84,7 +84,7 @@ In your project's `config` folder, create the required config files.
 - `user_rights.php-default`
 
 	here you can define further custom access rights, allowing easy control over which buttons will be rendered in view files, depending on the role of the user that's viewing them.
-	
+
 See [4. Grant/Restrict group rights](#### 4. Grant/Restrict group rights) for further information and example code snippets.
 
 **auth_actions.php**
@@ -103,7 +103,7 @@ A commonly used, basic set of user roles ADMIN and USER can be defined as follow
 
 	const ROLE_ADMIN = 'admin';
 	const ROLE_USER = 'user';
-	
+
 Set the field `role` accessible, like so:
 
 	 protected $_accessible = [
@@ -116,9 +116,9 @@ Following the example of a simple USER and ADMIN setup above, consider the follo
 
 - **restricting access for non-admin users:**
 	Consider a basic "Users" MVC setup. Assuming you wish to only grant ADMINS access to every controller-action, including edit() as well as any functions added later on, while restricting USERS from all functions except for index() and view().
-	
+
 	In `auth_actions.php`:
-	
+
 		$config = [
 			'auth_actions' => [
 				// Controller name: 'Users'
@@ -127,9 +127,9 @@ Following the example of a simple USER and ADMIN setup above, consider the follo
 					'*' => [
 						User::ROLE_ADMIN
 					],
-					
+
 					// here we explicitly list actions that
-					// USERS shall be able to access 
+					// USERS shall be able to access
 					'index' => [
 						User::ROLE_USER
 					],
@@ -139,11 +139,11 @@ Following the example of a simple USER and ADMIN setup above, consider the follo
 				]
 			]
 		];
-	
+
 - **preventing buttons from being rendered in a view:** The above code will prevent USERS from calling any action in UsersController except for index() and view() but - for example - edit buttons next to User entities in your index-view will still be rendered. Here's how you can prevent them from being rendered if the view file is being viewes by a non-ADMIN user:
 
 	In `user_rights.php`:
-	
+
 		$config = [
 			'user_rights' => [
 				// granting a custom right only for Users of type ADMIN
