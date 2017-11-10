@@ -1,36 +1,44 @@
 <?php
+declare(strict_types = 1);
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
+use Cake\Database\Type;
+Configure::write('debug', true);
 /**
- * Test runner bootstrap.
- * Add additional configuration/setup your application needs when running
- * unit tests in this file.
+ * Test suite bootstrap for ModelHistory.
  */
+// Customize this to be a relative path for embedded plugins.
+// For standalone plugins, this should point at a CakePHP installation.
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
-define('ROOT', dirname(__DIR__));
-define('APP_DIR', 'App');
-define('WEBROOT_DIR', 'webroot');
-define('APP', ROOT . '/tests/App/');
-define('CONFIG', ROOT . '/tests/config/');
-define('WWW_ROOT', ROOT . DS . WEBROOT_DIR . DS);
-define('TESTS', ROOT . DS . 'tests' . DS);
-define('TMP', ROOT . DS . 'tmp' . DS);
-define('LOGS', TMP . 'logs' . DS);
-define('CACHE', TMP . 'cache' . DS);
-define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
-require ROOT . '/vendor/autoload.php';
-require CORE_PATH . 'config/bootstrap.php';
-Cake\Core\Configure::write('App', ['namespace' => 'App']);
-Cake\Core\Configure::write('debug', true);
-
-// Ensure default test connection is defined
-if (!getenv('db_dsn')) {
-    putenv('db_dsn=sqlite:///:memory:');
+define('APP', 'tests' . DS . 'ModelHistoryTestApp' . DS);
+define('CONFIG', __DIR__ . DS . '..' . DS . 'config' . DS);
+$vendorPos = strpos(__DIR__, 'vendor/codekanzlei/cake-auth-actions');
+if ($vendorPos !== false) {
+    // Package has been cloned within another composer package, resolve path to autoloader
+    $vendorDir = substr(__DIR__, 0, $vendorPos) . 'vendor/';
+    $loader = require $vendorDir . 'autoload.php';
+} else {
+    // Package itself (cloned standalone)
+    $loader = require __DIR__ . '/../vendor/autoload.php';
 }
-
-Cake\Datasource\ConnectionManager::setConfig('test', [
-    'url' => getenv('db_dsn'),
+require_once 'vendor/cakephp/cakephp/src/basics.php';
+Cake\Datasource\ConnectionManager::config('test', [
+    'className' => 'Cake\Database\Connection',
+    'driver' => 'Cake\Database\Driver\Mysql',
+    'persistent' => false,
+    'host' => 'localhost',
+    'username' => 'root',
+    'password' => '',
+    'database' => 'model_history_test',
+    'encoding' => 'utf8',
     'timezone' => 'UTC'
+]);
+Cache::config('_cake_core_', [
+    'className' => 'File',
+    'prefix' => 'mh_cake_core_',
+    'path' => 'cache/persistent/',
+    'serialize' => true,
+    'duration' => '+2 minutes',
 ]);

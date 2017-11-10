@@ -41,7 +41,7 @@ class UserRights
     public function userHasRight(array $user, $right)
     {
         if (isset($this->_rightsConfig[$right])) {
-            return AuthActions::isUserAuthorized($user, $this->_rightsConfig, $right);
+            return Auth::userHasPermissionFor($user, $this->_rightsConfig, $right);
         }
         return false;
     }

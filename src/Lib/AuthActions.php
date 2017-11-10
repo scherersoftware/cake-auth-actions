@@ -54,53 +54,6 @@ class AuthActions
     }
 
     /**
-     * Checks whether the user has access to the given action for the given configuration
-     *
-     * @param array  $user      user to check
-     * @param array  $config    rights configuration
-     * @param string $configKey configuration key to check
-     * @return bool
-     */
-    public static function isUserAuthorized($user, $config, $configKey)
-    {
-        $permissions = [];
-
-        if (isset($config['*'])) {
-            $permissions = $config['*'];
-        } elseif (isset($config[$configKey])) {
-            $permissions = $config[$configKey];
-        }
-
-        if ($permissions === '*') {
-            return true;
-        }
-
-        if (in_array($user['role'], $permissions)) {
-            return true;
-        }
-
-        foreach ($permissions as $key => $permission) {
-            if (is_array($permission)) {
-                foreach ($permission as $path => $pathValue) {
-                    if (!in_array(Hash::get($user, $path), $pathValue)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            if (is_string($key)
-                && is_array($permission)
-                && in_array(Hash::get($user, $key), $permission)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Checks whether the user has access to certain controller action
      *
      * @param array  $user       user to check
@@ -131,7 +84,7 @@ class AuthActions
                 $key = $plugin . '.' . $key;
             }
 
-            $isAuthorized = self::isUserAuthorized($user, $this->_rightsConfig[$key], $action);
+            $isAuthorized = Auth::userHasPermissionFor($user, $this->_rightsConfig[$key], $action);
         }
         return $isAuthorized;
     }
