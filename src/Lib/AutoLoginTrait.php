@@ -45,9 +45,8 @@ trait AutoLoginTrait
      * Validates the token.
      *
      * @param string $token Token
-     * @param string $key   Security key
-     * @param string $salt  Security salt
      * @return array|null
+     * @throws \Exception
      */
     public function validateLoginToken(string $token): ?array
     {
@@ -74,6 +73,7 @@ trait AutoLoginTrait
      * @param string     $expireInterval      When this token expires
      * @param bool       $addRememberMeCookie Enabling setting the remember me cookie on auto login
      * @return string
+     * @throws \Exception
      */
     public function generateLoginToken(
         array $redirectUrl = null,
@@ -110,10 +110,11 @@ trait AutoLoginTrait
      */
     public function getSalt(): string
     {
-        if (Configure::load('auth_actions') === false) {
+        $salt = Configure::read('auto_login.salt');
+        if ($salt === false) {
             trigger_error('UserRights: Could not load config/user_rights.php', E_USER_WARNING);
         }
 
-        return Configure::read('auto_login.salt');
+        return $salt;
     }
 }

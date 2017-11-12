@@ -31,14 +31,19 @@ Cake\Datasource\ConnectionManager::config('test', [
     'host' => 'localhost',
     'username' => 'root',
     'password' => '',
-    'database' => 'model_history_test',
+    'database' => 'auth_actions_test',
     'encoding' => 'utf8',
     'timezone' => 'UTC'
 ]);
-Cache::config('_cake_core_', [
+
+Cache::setConfig('_cake_core_', [
     'className' => 'File',
     'prefix' => 'mh_cake_core_',
     'path' => 'cache/persistent/',
     'serialize' => true,
     'duration' => '+2 minutes',
+]);
+
+Configure::write('auto_login', [
+    'salt' => 'foobar1234foobar1234foobar1234foobar1234foobar1234'
 ]);

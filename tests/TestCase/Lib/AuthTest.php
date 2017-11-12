@@ -12,7 +12,20 @@ class AuthTest extends TestCase
 {
     public function testGlobalHasPermission()
     {
-        $enabled = Auth::globalHasPermission(
+        $enabled = Auth::isAuthorized(
+            [
+                'bar' => [
+                    function() {
+                        return false;
+                    }
+                ]
+            ],
+            'bar'
+        );
+
+        $this->assertFalse($enabled);
+
+        $enabled = Auth::isAuthorized(
             [
                 'bar' => [
                     function() {
@@ -25,7 +38,7 @@ class AuthTest extends TestCase
 
         $this->assertTrue($enabled);
 
-        $enabled = Auth::globalHasPermission(
+        $enabled = Auth::isAuthorized(
             [
                 'bar' => true
             ],
@@ -34,7 +47,7 @@ class AuthTest extends TestCase
 
         $this->assertTrue($enabled);
 
-        $enabled = Auth::globalHasPermission(
+        $enabled = Auth::isAuthorized(
             [
                 'bar'
             ],
@@ -43,7 +56,7 @@ class AuthTest extends TestCase
 
         $this->assertFalse($enabled);
 
-        $enabled = Auth::globalHasPermission(
+        $enabled = Auth::isAuthorized(
             [
                 'bar'
             ],
@@ -55,7 +68,7 @@ class AuthTest extends TestCase
 
     public function testUserHasPermissionFor()
     {
-        $enabled = Auth::userHasPermissionFor(
+        $enabled = Auth::userIsAuthorized(
             [
                 'role' => 'foobar',
                 'status' => 'barbar'
@@ -70,7 +83,7 @@ class AuthTest extends TestCase
 
         $this->assertFalse($enabled);
 
-        $enabled = Auth::userHasPermissionFor(
+        $enabled = Auth::userIsAuthorized(
             [
                 'role' => 'foobar',
                 'status' => 'barbar'
@@ -85,7 +98,7 @@ class AuthTest extends TestCase
 
         $this->assertFalse($enabled);
 
-        $enabled = Auth::userHasPermissionFor(
+        $enabled = Auth::userIsAuthorized(
             [
                 'role' => 'foobar',
                 'status' => 'barbar'

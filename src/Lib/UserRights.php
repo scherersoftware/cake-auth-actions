@@ -38,11 +38,8 @@ class UserRights
      * @param string $right right name
      * @return bool
      */
-    public function userHasRight(array $user, $right)
+    public function userHasRight(array $user, string $right): bool
     {
-        if (isset($this->_rightsConfig[$right])) {
-            return Auth::userHasPermissionFor($user, $this->_rightsConfig, $right);
-        }
-        return false;
+        return Auth::userIsAuthorized($user, $this->_rightsConfig, $right);
     }
 }

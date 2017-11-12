@@ -16,7 +16,7 @@ class Auth
      * @param string $name
      * @return bool
      */
-    public static function userHasPermissionFor(array $user, array $config, string $name): bool
+    public static function userIsAuthorized(array $user, array $config, string $name): bool
     {
         if (array_key_exists('*', $config)) {
             $name = '*';
@@ -44,14 +44,14 @@ class Auth
      */
     public static function userHasPermission(array $user, array $config): bool
     {
-        $resolver = function($key, $value) use ($user) {
-            return self::_resolveValue($user, $key, $value);
+        $resolver = function ($key, $value) use ($user) {
+            return self::_resolveValueForUser($user, $key, $value);
         };
 
         return self::_resolve($config, $resolver, self:: OR);
     }
 
-    public static function globalHasPermission(array $config, string $permission): bool
+    public static function isAuthorized(array $config, string $permission): bool
     {
         if (array_key_exists('*', $config)) {
             $permission = '*';
@@ -65,23 +65,11 @@ class Auth
             return false;
         }
 
-        $resolver = function($key, $value) {
-            if (is_callable($value)) {
-                $value = $value($key);
-            }
-
-            if (is_array($value)) {
-                return in_array($key, $value);
-            }
-
-            return $value === true;
-        };
-
         if (!is_array($config[$permission])) {
-            return $resolver($permission, $config[$permission]);
+            return self::_resolveValueForGlobal($permission, $config[$permission]);
         }
 
-        return self::_resolve( $config[$permission], $resolver, self:: OR);
+        return self::_resolve($config[$permission], [__CLASS__, '_resolveValueForGlobal'], self:: OR);
     }
 
     /**
@@ -125,7 +113,6 @@ class Auth
                 }
             }
 
-
             if ($result === true && $type === self:: OR) {
                 return true;
             }
@@ -142,13 +129,27 @@ class Auth
         return $return;
     }
 
+
+    protected static function _resolveValueForGlobal(string $key, $value): bool
+    {
+        if (is_callable($value)) {
+            $value = $value($key);
+        }
+
+        if (is_array($value)) {
+            return in_array($key, $value);
+        }
+
+        return $value === true;
+    }
+
     /**
      * @param array  $user
      * @param string $key
      * @param mixed  $value
      * @return bool
      */
-    protected static function _resolveValue(array $user, string $key, $value): bool
+    protected static function _resolveValueForUser(array $user, string $key, $value): bool
     {
         $userValue = Hash::get($user, $key);
 

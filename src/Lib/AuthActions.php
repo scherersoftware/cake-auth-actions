@@ -56,67 +56,19 @@ class AuthActions
     /**
      * Checks whether the user has access to certain controller action
      *
-     * @param array  $user       user to check
-     * @param string $plugin     plugin name or null
-     * @param string $controller controller name
-     * @param string $action     action
+     * @param array $user user to check
+     * @param array $route
      * @return bool
      */
-    public function isAuthorized($user, $plugin, $controller, $action)
+    public function isAuthorized(array $user, array $route): bool
     {
-        $isAuthorized = false;
+        $key = $this->_getKeyFromRoute($route);
 
-        if ($plugin) {
-            $plugin = Inflector::camelize($plugin);
+        if ($this->isPublicAction($route)) {
+            return true;
         }
 
-        if ($this->isPublicAction($plugin, $controller, $action)) {
-            $isAuthorized = true;
-        } elseif (isset($user['role']) && !empty($controller) && !empty($action)) {
-            if ($this->_options['camelizedControllerNames']) {
-                $controller = Inflector::camelize($controller);
-            } else {
-                $controller = Inflector::underscore($controller);
-            }
-
-            $key = $controller;
-            if (!empty($plugin)) {
-                $key = $plugin . '.' . $key;
-            }
-
-            $isAuthorized = Auth::userHasPermissionFor($user, $this->_rightsConfig[$key], $action);
-        }
-        return $isAuthorized;
-    }
-
-    /**
-     * Checks if the given plugin/controller/action combination is configured to be public
-     *
-     * @param string $plugin     plugin name
-     * @param string $controller controller name
-     * @param string $action     action name
-     * @return bool
-     */
-    public function isPublicAction($plugin, $controller, $action)
-    {
-        if ($this->_options['camelizedControllerNames']) {
-            $controller = Inflector::camelize($controller);
-        } else {
-            $controller = Inflector::underscore($controller);
-        }
-        $key = ($plugin ? $plugin . '.' : '') . $controller;
-
-        $isPublic = false;
-        if (isset($this->_publicActions[$key])) {
-            if ($this->_publicActions[$key] === '*') {
-                $isPublic = true;
-            } elseif ($this->_publicActions[$key] === $action) {
-                $isPublic = true;
-            } elseif (is_array($this->_publicActions[$key]) && in_array($action, $this->_publicActions[$key])) {
-                $isPublic = true;
-            }
-        }
-        return $isPublic;
+        return Auth::userIsAuthorized($user, $this->_rightsConfig[$key], $route['action']);
     }
 
     /**
@@ -124,9 +76,9 @@ class AuthActions
      *
      * @param array        $user user to check with
      * @param array|string $url  url to check
-     * @return void
+     * @return bool
      */
-    public function urlAllowed($user, $url)
+    public function urlAllowed(array $user, $url): bool
     {
         if (empty($url)) {
             return false;
@@ -146,6 +98,30 @@ class AuthActions
         if (empty($route['controller']) || empty($route['action'])) {
             return false;
         }
-        return $this->isAuthorized($user, $route['plugin'], $route['controller'], $route['action']);
+
+        return $this->isAuthorized($user, $route);
+    }
+
+    public function isPublicAction(array $route): bool
+    {
+        $key = $this->_getKeyFromRoute($route);
+
+        return Auth::isAuthorized($this->_publicActions[$key], $route['action']);
+    }
+
+    protected function _getKeyFromRoute(array $route): string
+    {
+        if ($this->_options['camelizedControllerNames']) {
+            $controller = Inflector::camelize($route['controller']);
+        } else {
+            $controller = Inflector::underscore($route['controller']);
+        }
+
+        $key = $controller;
+        if (!empty($route['plugin'])) {
+            $key = $route['plugin'] . '.' . $key;
+        }
+
+        return $key;
     }
 }
