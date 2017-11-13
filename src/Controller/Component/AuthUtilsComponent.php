@@ -64,6 +64,7 @@ class AuthUtilsComponent extends Component
         if (!$this->loggedIn() && $this->Cookie->read('User.id')) {
             return $this->Cookie->read('User.id');
         }
+
         return null;
     }
 

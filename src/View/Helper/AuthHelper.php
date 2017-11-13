@@ -18,7 +18,7 @@ class AuthHelper extends Helper
      * @param View  $View   CakePHP view object
      * @param array $config helper config
      */
-    public function __construct(\Cake\View\View $View, array $config = array ())
+    public function __construct(\Cake\View\View $View, array $config = [])
     {
         parent::__construct($View, $config);
 
@@ -35,6 +35,7 @@ class AuthHelper extends Helper
         if ($this->_viewAuth) {
             return $this->sessionKey && $this->request->session()->check($this->sessionKey);
         }
+
         return false;
     }
 
@@ -54,6 +55,7 @@ class AuthHelper extends Helper
         if ($key === null) {
             return $user;
         }
+
         return Hash::get($user, $key);
     }
 
@@ -68,6 +70,7 @@ class AuthHelper extends Helper
         if ($this->_viewAuth) {
             return $this->_viewAuth['UserRights']->userHasRight($this->user(), $right);
         }
+
         return false;
     }
 
@@ -82,6 +85,7 @@ class AuthHelper extends Helper
         if ($this->_viewAuth) {
             return $this->_viewAuth['AuthActions']->urlAllowed($this->user(), $url);
         }
+
         return false;
     }
 }

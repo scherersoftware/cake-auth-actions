@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AuthActions\Lib;
 
@@ -7,39 +7,39 @@ use Cake\Utility\Hash;
 
 class Auth
 {
-    protected const AND = 'AND';
-    protected const OR = 'OR';
+    protected const OPERATOR_AND = 'AND';
+    protected const OPERATOR_OR = 'OR';
 
     /**
-     * @param array  $user
-     * @param array  $config
-     * @param string $name
+     * @param array  $user       User data
+     * @param array  $config     Configuration
+     * @param string $permission Permissions
      * @return bool
      */
-    public static function userIsAuthorized(array $user, array $config, string $name): bool
+    public static function userIsAuthorized(array $user, array $config, string $permission): bool
     {
         if (array_key_exists('*', $config)) {
-            $name = '*';
+            $permission = '*';
         }
 
-        if (!array_key_exists($name, $config) && in_array($name, $config)) {
+        if (!array_key_exists($permission, $config) && in_array($permission, $config)) {
             return true;
         }
 
-        if (!array_key_exists($name, $config) && !in_array($name, $config)) {
+        if (!array_key_exists($permission, $config) && !in_array($permission, $config)) {
             return false;
         }
 
-        if (!is_array($config[$name])) {
+        if (!is_array($config[$permission])) {
             return false;
         }
 
-        return self::userHasPermission($user, $config[$name]);
+        return self::userHasPermission($user, $config[$permission]);
     }
 
     /**
-     * @param array $user
-     * @param array $config
+     * @param array $user   User data
+     * @param array $config Configuration
      * @return bool
      */
     public static function userHasPermission(array $user, array $config): bool
@@ -48,9 +48,14 @@ class Auth
             return self::_resolveValueForUser($user, $key, $value);
         };
 
-        return self::_resolve($config, $resolver, self:: OR);
+        return self::_resolve($config, $resolver, self:: OPERATOR_OR);
     }
 
+    /**
+     * @param array  $config     Configuration
+     * @param string $permission Permission name
+     * @return bool
+     */
     public static function isAuthorized(array $config, string $permission): bool
     {
         if (array_key_exists('*', $config)) {
@@ -69,19 +74,21 @@ class Auth
             return self::_resolveValueForGlobal($permission, $config[$permission]);
         }
 
-        return self::_resolve($config[$permission], [__CLASS__, '_resolveValueForGlobal'], self:: OR);
+        return self::_resolve($config[$permission], [__CLASS__, '_resolveValueForGlobal'], self:: OPERATOR_OR);
     }
 
     /**
-     * @param array  $user
-     * @param array  $config
-     * @param string $type
+     * Function that recursively goes through a configuration array and calls the value resolver if necessary.
+     *
+     * @param array    $config   Configuration
+     * @param callable $resolver Resolver function
+     * @param string   $type     Type
      * @return bool
      */
     protected static function _resolve(array $config, callable $resolver, string $type = 'OR'): bool
     {
         if (isset($config['*'])) {
-            return self::_resolve($config['*'], $resolver, self:: OR);
+            return self::_resolve($config['*'], $resolver, self:: OPERATOR_OR);
         }
 
         $return = false;
@@ -93,10 +100,10 @@ class Auth
                 $result = $value;
             } elseif (is_string($key)) {
                 if (is_array($value)) {
-                    if ($key === self:: AND) {
-                        $result = self::_resolve($value, $resolver, self:: AND);
-                    } elseif ($key === self:: OR) {
-                        $result = self::_resolve($value, $resolver, self:: OR);
+                    if ($key === self::OPERATOR_AND) {
+                        $result = self::_resolve($value, $resolver, self::OPERATOR_AND);
+                    } elseif ($key === self::OPERATOR_OR) {
+                        $result = self::_resolve($value, $resolver, self::OPERATOR_OR);
                     } else {
                         $result = $resolver($key, $value);
                     }
@@ -113,15 +120,15 @@ class Auth
                 }
             }
 
-            if ($result === true && $type === self:: OR) {
+            if ($result === true && $type === self:: OPERATOR_OR) {
                 return true;
             }
 
-            if ($result === false && $type === self:: AND) {
+            if ($result === false && $type === self:: OPERATOR_AND) {
                 return false;
             }
 
-            if ($result === true && $type === self:: AND) {
+            if ($result === true && $type === self:: OPERATOR_AND) {
                 $return = true;
             }
         }
@@ -129,7 +136,13 @@ class Auth
         return $return;
     }
 
-
+    /**
+     * Resolves a value.
+     *
+     * @param string $key   Array key
+     * @param mixed  $value Array value
+     * @return bool
+     */
     protected static function _resolveValueForGlobal(string $key, $value): bool
     {
         if (is_callable($value)) {
@@ -144,9 +157,11 @@ class Auth
     }
 
     /**
-     * @param array  $user
-     * @param string $key
-     * @param mixed  $value
+     * Resolves a value for the given user.
+     *
+     * @param array  $user  User
+     * @param string $key   Array key
+     * @param mixed  $value Array value
      * @return bool
      */
     protected static function _resolveValueForUser(array $user, string $key, $value): bool

@@ -1,8 +1,7 @@
 <?php
+declare(strict_types = 1);
 
 namespace AuthActions\Lib;
-
-use Cake\Utility\Hash;
 
 class UserRights
 {
@@ -19,14 +18,14 @@ class UserRights
      *
      * @var string
      */
-    protected $_rightsConfig = array ();
+    protected $_rightsConfig = [];
 
     /**
      * Constructor
      *
      * @param array $rightsConfig The rights configuration
      */
-    public function __construct(array $rightsConfig)
+    public function __construct(array $rightsConfig = [])
     {
         $this->_rightsConfig = $rightsConfig;
     }

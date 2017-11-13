@@ -1,9 +1,7 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace AuthActions\Test\TestCase\Lib;
-
 
 use AuthActions\Lib\Auth;
 use Cake\TestSuite\TestCase;
@@ -15,7 +13,7 @@ class AuthTest extends TestCase
         $enabled = Auth::isAuthorized(
             [
                 'bar' => [
-                    function() {
+                    function () {
                         return false;
                     }
                 ]
@@ -28,7 +26,7 @@ class AuthTest extends TestCase
         $enabled = Auth::isAuthorized(
             [
                 'bar' => [
-                    function() {
+                    function () {
                         return true;
                     }
                 ]
@@ -356,7 +354,6 @@ class AuthTest extends TestCase
 
         $this->assertFalse($enabled);
 
-
         $enabled = Auth::userHasPermission([
             'role' => 'foobar',
             'status' => 'barbar'
@@ -411,7 +408,6 @@ class AuthTest extends TestCase
 
         $this->assertFalse($enabled);
 
-
         $enabled = Auth::userHasPermission([
             'role' => 'foobar',
             'status' => 'barbar'
@@ -445,7 +441,6 @@ class AuthTest extends TestCase
 
         $this->assertTrue($enabled);
 
-
         $enabled = Auth::userHasPermission([
             'status' => 'active'
         ], [
@@ -453,7 +448,6 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertTrue($enabled);
-
 
         $enabled = Auth::userHasPermission([
             'status' => 'inactive'
@@ -463,7 +457,6 @@ class AuthTest extends TestCase
 
         $this->assertFalse($enabled);
 
-
         $enabled = Auth::userHasPermission([
             'status' => 'active',
             'role' => 'foo'
@@ -474,7 +467,6 @@ class AuthTest extends TestCase
 
         $this->assertTrue($enabled);
 
-
         $enabled = Auth::userHasPermission([
             'role' => 'foo'
         ], [
@@ -483,7 +475,6 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertTrue($enabled);
-
 
         $enabled = Auth::userHasPermission([
             'role' => 'foo'
@@ -493,7 +484,6 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertFalse($enabled);
-
 
         $enabled = Auth::userHasPermission([
             'role' => 'foo',
@@ -506,7 +496,6 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertTrue($enabled);
-
 
         $enabled = Auth::userHasPermission([
             'role' => 'foo',

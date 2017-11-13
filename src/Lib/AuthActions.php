@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AuthActions\Lib;
 
@@ -21,7 +22,7 @@ class AuthActions
      *
      * @var string
      */
-    protected $_rightsConfig = array ();
+    protected $_rightsConfig = [];
 
     /**
      * Holds the public actions config
@@ -57,7 +58,7 @@ class AuthActions
      * Checks whether the user has access to certain controller action
      *
      * @param array $user user to check
-     * @param array $route
+     * @param array $route Route
      * @return bool
      */
     public function isAuthorized(array $user, array $route): bool
@@ -102,6 +103,12 @@ class AuthActions
         return $this->isAuthorized($user, $route);
     }
 
+    /**
+     * Returns whether the given route is a public action.
+     *
+     * @param array $route Route
+     * @return bool
+     */
     public function isPublicAction(array $route): bool
     {
         $key = $this->_getKeyFromRoute($route);
@@ -109,6 +116,12 @@ class AuthActions
         return Auth::isAuthorized($this->_publicActions[$key], $route['action']);
     }
 
+    /**
+     * Returns the array key for the given route array
+     *
+     * @param array $route Route
+     * @return string
+     */
     protected function _getKeyFromRoute(array $route): string
     {
         if ($this->_options['camelizedControllerNames']) {

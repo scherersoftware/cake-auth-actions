@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AuthActions\Lib;
 
@@ -37,7 +38,6 @@ trait AuthActionsTrait
             }
         }, 'Controller.beforeRender');
 
-
         if ($this->getAuthActions()->isPublicAction($this->request->params)) {
             $this->Auth->allow();
         }
@@ -67,6 +67,7 @@ trait AuthActionsTrait
 
             $this->_AuthActions = new AuthActions($actionConfig, $publicActionsConfig, $options);
         }
+
         return $this->_AuthActions;
     }
 
@@ -89,6 +90,7 @@ trait AuthActionsTrait
 
             $this->_UserRights = new UserRights($rightsConfig);
         }
+
         return $this->_UserRights;
     }
 
@@ -117,6 +119,7 @@ trait AuthActionsTrait
         if ($user !== null) {
             return $this->getUserRights()->userHasRight($user, $right);
         }
+
         return false;
     }
 }

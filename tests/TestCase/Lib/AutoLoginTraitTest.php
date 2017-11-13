@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace AuthActions\Test\TestCase\Lib;
 
@@ -20,7 +20,6 @@ class AutoLoginTraitTest extends TestCase
     public $fixtures = [
         'plugin.auth_actions.users'
     ];
-
 
     /**
      * setUp method
