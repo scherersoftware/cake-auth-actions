@@ -1,35 +1,34 @@
 {
-	"name": "codekanzlei/cake-auth-actions",
-	"description": "Simple ACL alternative for CakePHP 3",
-	"license": "MIT",
-	"type": "cakephp-plugin",
-	"extra": {
-    	"installer-name": "AuthActions"
-	},
-	"require": {
-        "php": ">=7.1",
-        "cakephp/cakephp": "~3.4",
-		"cakephp/plugin-installer": "*"
-	},
-	"require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "cakephp/cakephp": "^3.4",
-        "phpstan/phpstan": "^0.8",
-        "cakephp/cakephp-codesniffer": "^3.0",
-        "scherersoftware/coding-standard": "^3.0"
-	},
-	"autoload": {
-		"psr-4": {
-		    "AuthActions\\": "src"
-		}
-	},
-    "autoload-dev": {
-        "psr-4": {
-            "AuthActions\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit --colors=always"
+  "name": "codekanzlei/cake-auth-actions",
+  "description": "Simple ACL alternative for CakePHP 3",
+  "license": "MIT",
+  "type": "cakephp-plugin",
+  "extra": {
+    "installer-name": "AuthActions"
+  },
+  "require": {
+    "php": ">=7.1",
+    "cakephp/cakephp": "~3.4",
+    "cakephp/plugin-installer": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.0",
+    "phpstan/phpstan": "^0.8",
+    "cakephp/cakephp-codesniffer": "^3.0",
+    "scherersoftware/coding-standard": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AuthActions\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AuthActions\\Test\\": "tests",
+      "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit --colors=always"
+  }
 }

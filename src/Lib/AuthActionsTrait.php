@@ -46,7 +46,7 @@ trait AuthActionsTrait
     /**
      * Instance getter for the AuthActions instance
      *
-     * @return AuthActions
+     * @return \AuthActions\Lib\AuthActions
      */
     public function getAuthActions(): AuthActions
     {
@@ -74,7 +74,7 @@ trait AuthActionsTrait
     /**
      * Instance getter for the UserRights instance
      *
-     * @return UserRights
+     * @return \AuthActions\Lib\UserRights
      */
     public function getUserRights(): UserRights
     {
