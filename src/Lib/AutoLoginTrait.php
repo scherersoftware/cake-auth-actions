@@ -32,7 +32,6 @@ trait AutoLoginTrait
             $addRememberMeCookie
         );
         $url = Router::url($autoUrl, true);
-        $urlLength = strlen($url);
         if (strlen($url) > 2080) {
             throw new \Exception('Generated url "' . $url . '" is too long');
         }
@@ -109,11 +108,10 @@ trait AutoLoginTrait
      */
     public function getSalt(): string
     {
-        $salt = Configure::read('auto_login.salt');
-        if (!$salt) {
-            trigger_error('UserRights: Could not load config/user_rights.php', E_USER_WARNING);
+        if (Configure::load('auto_login') === false) {
+            trigger_error('AutoLogin: Could not load config/auto_login.php', E_USER_WARNING);
         }
 
-        return $salt;
+        return Configure::read('auto_login.salt');
     }
 }
