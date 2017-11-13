@@ -77,13 +77,19 @@ In your project's `config` folder, create the required config files.
 
 **Note:** For reference, see these files:
 
-- `auth_actions.php-default`
+- `auth_actions.php.default`
 
 	here you can grant or restrict access to Controller functions to certain user roles.
 
-- `user_rights.php-default`
+- `user_rights.php.default`
 
 	here you can define further custom access rights, allowing easy control over which buttons will be rendered in view files, depending on the role of the user that's viewing them.
+
+
+- `auto_login.php.default`
+
+	here you need to define the configuration for the auto login -  if you want to use it
+
 
 See [4. Grant/Restrict group rights](#### 4. Grant/Restrict group rights) for further information and example code snippets.
 
@@ -135,7 +141,14 @@ Following the example of a simple USER and ADMIN setup above, consider the follo
 					],
 					'view' => [
 						User::ROLE_USER
-					]
+					],
+					// `AND` and `OR`
+					'delete' => [
+					    'AND' => [
+					        'role' => ['admin'],
+					        'age' => 24
+					    ]
+ 					]
 				]
 			]
 		];
@@ -158,3 +171,23 @@ Following the example of a simple USER and ADMIN setup above, consider the follo
 		<?php if ($this->Auth->hasRight('viewEditButton')): ?>
 			<?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
 		<?php endif; ?>
+
+- **complex checks**
+
+    In both `auth_actions.php` and `user_rights.php` you can use the following syntax:
+
+        'OR' => [
+            'a' => true,
+            'b' => false
+        ] // => results in true
+
+        'AND' => [
+            'a' => true,
+            'b' => false
+        ] // => results in false
+
+        // AND and OR are recursively combinable
+
+        'a' => function () {return true}; // callbacks are supported
+
+        'personal_data.age' => '24' // Hash::get() accessors for user variables are supported if there is a user 
