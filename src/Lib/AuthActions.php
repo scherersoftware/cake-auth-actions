@@ -71,6 +71,10 @@ class AuthActions
             return true;
         }
 
+        if (!isset($this->_rightsConfig[$key])) {
+            return false;
+        }
+
         return Auth::isAuthorized($this->_rightsConfig[$key], $route['action'], $user);
     }
 
@@ -114,6 +118,10 @@ class AuthActions
     public function isPublicAction(array $route): bool
     {
         $key = $this->_getKeyFromRoute($route);
+
+        if (!isset($this->_publicActions[$key])) {
+            return false;
+        }
 
         return Auth::isAuthorized($this->_publicActions[$key], $route['action']);
     }
