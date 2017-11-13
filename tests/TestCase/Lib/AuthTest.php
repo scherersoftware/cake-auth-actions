@@ -8,7 +8,7 @@ use Cake\TestSuite\TestCase;
 
 class AuthTest extends TestCase
 {
-    public function testAuthForPublicActions()
+    public function testAuthForPublicActions(): void
     {
         $publicActions = [
             'home' => [
@@ -107,7 +107,7 @@ class AuthTest extends TestCase
         $this->assertFalse(Auth::isAuthorized($publicActions['complex_10'], 'bar'));
     }
 
-    public function testAuthForUserRights()
+    public function testAuthForUserRights(): void
     {
         $userRights = [
             'viewAllUsers' => [
@@ -193,7 +193,7 @@ class AuthTest extends TestCase
         );
     }
 
-    public function testAuthForAuthActions()
+    public function testAuthForAuthActions(): void
     {
         $authActions = [
             'Admin.dashbaord' => [

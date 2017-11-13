@@ -1,15 +1,23 @@
 <?php
+declare(strict_types = 1);
 
 namespace AuthActions\View\Helper;
 
 use Cake\Utility\Hash;
 use Cake\View\Helper;
+use Cake\View\View;
 
 class AuthHelper extends Helper
 {
 
+    /**
+     * @var string
+     */
     public $sessionKey = 'Auth.User';
 
+    /**
+     * @var array
+     */
     protected $_viewAuth;
 
     /**
@@ -18,7 +26,7 @@ class AuthHelper extends Helper
      * @param View  $View   CakePHP view object
      * @param array $config helper config
      */
-    public function __construct(\Cake\View\View $View, array $config = [])
+    public function __construct(View $View, array $config = [])
     {
         parent::__construct($View, $config);
 
@@ -30,7 +38,7 @@ class AuthHelper extends Helper
      *
      * @return bool
      */
-    public function loggedIn()
+    public function loggedIn(): bool
     {
         if ($this->_viewAuth) {
             return $this->sessionKey && $this->request->session()->check($this->sessionKey);
@@ -45,7 +53,7 @@ class AuthHelper extends Helper
      * @param string $key Key to read
      * @return mixed
      */
-    public function user($key = null)
+    public function user(string $key = null)
     {
         if ($this->sessionKey && $this->request->session()->check($this->sessionKey)) {
             $user = $this->request->session()->read($this->sessionKey);
@@ -65,7 +73,7 @@ class AuthHelper extends Helper
      * @param string $right name of right
      * @return bool
      */
-    public function hasRight($right)
+    public function hasRight(string $right): bool
     {
         if ($this->_viewAuth) {
             return $this->_viewAuth['UserRights']->userHasRight($this->user(), $right);
@@ -77,10 +85,10 @@ class AuthHelper extends Helper
     /**
      * Checks whether the URL is allowed for the currently logged in user
      *
-     * @param string|array $url url to check
+     * @param array $url url to check
      * @return bool
      */
-    public function urlAllowed($url)
+    public function urlAllowed(array $url): bool
     {
         if ($this->_viewAuth) {
             return $this->_viewAuth['AuthActions']->urlAllowed($this->user(), $url);

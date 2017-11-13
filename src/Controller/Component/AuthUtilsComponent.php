@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AuthActions\Controller\Component;
 
@@ -7,6 +8,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
+/**
+ * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \Cake\Controller\Component\CookieComponent $Cookie
+ */
 class AuthUtilsComponent extends Component
 {
     /**

@@ -26,7 +26,7 @@ class AutoLoginTraitTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->UsersTable = TableRegistry::get('Users');
@@ -38,14 +38,14 @@ class AutoLoginTraitTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->UsersTable);
         TableRegistry::clear();
         parent::tearDown();
     }
 
-    public function testUserLoginToken()
+    public function testUserLoginToken(): void
     {
         $userId = 1;
         $userToTest = $this->UsersTable->get($userId);

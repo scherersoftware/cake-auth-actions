@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Database\Type;
 
 Configure::write('debug', true);
 /**

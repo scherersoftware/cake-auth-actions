@@ -24,9 +24,9 @@ trait AuthActionsTrait
      *
      * @return void
      */
-    public function initAuthActions()
+    public function initAuthActions(): void
     {
-        EventManager::instance()->attach(function (\Cake\Event\Event $event) {
+        EventManager::instance()->attach(function (\Cake\Event\Event $event): void {
             // Make the AuthComponent, AuthActions and UserRights available to the view.
             // FIXME - find a clean way to do this
             if (!$event->subject() instanceof \Cake\Controller\ErrorController) {
