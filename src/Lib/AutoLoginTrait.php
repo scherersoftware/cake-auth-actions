@@ -108,8 +108,11 @@ trait AutoLoginTrait
      */
     public function getSalt(): string
     {
-        if (Configure::load('auto_login') === false) {
-            trigger_error('AutoLogin: Could not load config/auto_login.php', E_USER_WARNING);
+        $salt = Configure::read('auto_login.salt');
+        if (!$salt) {
+            if (Configure::load('auto_login') === false) {
+                trigger_error('AutoLogin: Could not load config/auto_login.php', E_USER_WARNING);
+            }
         }
 
         return Configure::read('auto_login.salt');
