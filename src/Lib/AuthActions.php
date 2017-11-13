@@ -3,12 +3,14 @@ declare(strict_types = 1);
 
 namespace AuthActions\Lib;
 
+use Cake\Core\InstanceConfigTrait;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 class AuthActions
 {
+    use InstanceConfigTrait;
 
     /**
      * Holds the rights config.
@@ -36,7 +38,7 @@ class AuthActions
      *
      * @var array
      */
-    protected $_options = [
+    protected $_defaultConfig = [
         'camelizedControllerNames' => false
     ];
 
@@ -51,7 +53,7 @@ class AuthActions
     {
         $this->_rightsConfig = $rightsConfig;
         $this->_publicActions = $publicActions;
-        $this->_options = Hash::merge($this->_options, $options);
+        $this->setConfig($options);
     }
 
     /**
@@ -69,7 +71,7 @@ class AuthActions
             return true;
         }
 
-        return Auth::userIsAuthorized($user, $this->_rightsConfig[$key], $route['action']);
+        return Auth::isAuthorized($this->_rightsConfig[$key], $route['action'], $user);
     }
 
     /**
@@ -124,7 +126,7 @@ class AuthActions
      */
     protected function _getKeyFromRoute(array $route): string
     {
-        if ($this->_options['camelizedControllerNames']) {
+        if ($this->getConfig('camelizedControllerNames')) {
             $controller = Inflector::camelize($route['controller']);
         } else {
             $controller = Inflector::underscore($route['controller']);

@@ -8,505 +8,329 @@ use Cake\TestSuite\TestCase;
 
 class AuthTest extends TestCase
 {
-    public function testGlobalHasPermission()
+    public function testAuthForPublicActions()
     {
-        $enabled = Auth::isAuthorized(
-            [
-                'bar' => [
-                    function () {
-                        return false;
-                    }
-                ]
+        $publicActions = [
+            'home' => [
+                'action_1',
+                'action_2'
             ],
-            'bar'
-        );
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::isAuthorized(
-            [
-                'bar' => [
-                    function () {
-                        return true;
-                    }
-                ]
+            'pages' => ['*'],
+            'Cms.sitemap' => ['*'],
+            'complex_1' => [
+                '*' => function () {
+                    return true;
+                }
             ],
-            'bar'
-        );
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::isAuthorized(
-            [
+            'complex_2' => [
+                '*' => function () {
+                    return false;
+                }
+            ],
+            'complex_3' => [
+                '*' => function () {
+                    return true;
+                },
+                'foo',
+                'bar'
+            ],
+            'complex_4' => [
+                'foo',
+                'bar' => function () {
+                    return true;
+                }
+            ],
+            'complex_5' => [
+                'foo',
                 'bar' => true
             ],
-            'bar'
-        );
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::isAuthorized(
-            [
-                'bar'
-            ],
-            'barz'
-        );
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::isAuthorized(
-            [
-                'bar'
-            ],
-            'bar'
-        );
-
-        $this->assertTrue($enabled);
-    }
-
-    public function testUserHasPermissionFor()
-    {
-        $enabled = Auth::userIsAuthorized(
-            [
-                'role' => 'foobar',
-                'status' => 'barbar'
-            ],
-            [
-                'foo' => [
-                    '*'
-                ]
-            ],
-            'bar'
-        );
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userIsAuthorized(
-            [
-                'role' => 'foobar',
-                'status' => 'barbar'
-            ],
-            [
-                'foo' => [
-                    'role' => 'asdf'
-                ]
-            ],
-            'foo'
-        );
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userIsAuthorized(
-            [
-                'role' => 'foobar',
-                'status' => 'barbar'
-            ],
-            [
-                'foo' => [
-                    '*'
-                ]
-            ],
-            'foo'
-        );
-
-        $this->assertTrue($enabled);
-    }
-
-    public function testUserHasPermission()
-    {
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            [
-                'foobar'
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'auth' => [
-                'foo' => [
-                    'bar' => [
-                        'baz' => false
-                    ]
-                ]
-            ]
-        ], [
-            'auth.foo.bar.baz' => function ($value) {
-                return false;
-            }
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'auth' => [
-                'foo' => [
-                    'bar' => [
+            'complex_6' => [
+                'foo',
+                'bar' => [
+                    'AND' => [
+                        'foo' => true,
                         'baz' => true
                     ]
                 ]
-            ]
-        ], [
-            'auth.foo.bar.baz' => function ($value) {
-                return true;
-            }
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'auth' => [
-                'foo' => [
-                    'bar' => [
-                        'baz' => 'noot'
-                    ]
-                ]
-            ]
-        ], [
-            'auth.foo.bar.baz' => function ($value) {
-                return 'noot';
-            }
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar',
-            'auth' => [
-                'foo' => 'bar'
-            ]
-        ], [
-            'AND' => [
-                'role' => 'foobar',
-                'auth.foo' => [
-                    'bar',
-                    'baz'
-                ]
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar',
-            'auth' => [
-                'foo' => 'bazz'
-            ]
-        ], [
-            'role' => function () {
-                return 'foobar';
-            }
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar',
-            'auth' => [
-                'foo' => 'bazz'
-            ]
-        ], [
-            true
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar',
-            'auth' => [
-                'foo' => 'bazz'
-            ]
-        ], [
-            false
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar',
-            'auth' => [
-                'foo' => 'bazz'
-            ]
-        ], [
-            'AND' => [
-                'role' => 'foobar',
-                'auth.foo' => [
-                    'bar',
-                    'baz'
-                ]
-            ]
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'abc',
-            'def',
-            'foobar2'
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'abc',
-            'def',
-            'foobar'
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'AND' => [
-                'role' => ['*']
-            ]
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'AND' => [
-                'AND' => [
-                    'OR' => [
-                        'AND' => [
-                            'AND' => [
-                                'OR' => [
-                                    'AND' => [
-                                        'role' => 'foobar',
-                                        'status' => 'barbar'
-                                    ],
-                                    'status' => 'boop'
-                                ]
-                            ]
-                        ]
-                    ],
-                    'role' => 'foobar'
-                ]
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'AND' => [
-                'AND' => [
-                    'OR' => [
-                        'AND' => [
-                            'AND' => [
-                                'OR' => [
-                                    'AND' => [
-                                        'role' => 'foobar',
-                                        'status' => 'barbar'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'OR' => [
-                'role' => '*',
-                'status' => 'barbarbar'
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'AND' => [
-                'role' => '*',
-                'status' => 'barbarbar'
-            ]
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'AND' => [
-                'role' => '*',
-                'status' => 'barbar'
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'role' => '*',
-            'status' => 'barbar'
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'role' => '*'
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            '*' => [
-                'foobar',
-                'barbar'
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'fooba2r',
-            'status' => 'barbar'
-        ], [
-            '*' => [
-                ['foobar', 'barbar']
-            ]
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            '*' => [
-                'role' => ['foobar', 'barbar']
-            ]
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            '*'
-        ]);
-
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foobar',
-            'status' => 'barbar'
-        ], [
-            'AND' => [
-                'role' => 'foo',
-                'status' => 'bar',
             ],
-            'status' => 'barbar'
-        ]);
+            'complex_7' => [
+                'foo',
+                'bar' => [
+                    'AND' => [
+                        'foo' => true,
+                        'baz' => false
+                    ]
+                ]
+            ],
+            'complex_8' => [
+                'foo',
+                'bar' => [
+                    'OR' => [
+                        'foo' => true,
+                        'baz' => false
+                    ]
+                ]
+            ],
+            'complex_9' => [
+                'foo',
+                'bar' => [
+                    [
+                        'foo' => true,
+                        'baz' => false
+                    ]
+                ]
+            ],
+            'complex_10' => [
+                'foo',
+                'bar' => [
+                    [
+                        'foo' => false,
+                        'baz' => false
+                    ]
+                ]
+            ],
+        ];
 
-        $this->assertTrue($enabled);
+        $this->assertTrue(Auth::isAuthorized($publicActions['home'], 'action_1'));
+        $this->assertFalse(Auth::isAuthorized($publicActions['home'], 'false'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['pages'], 'bar'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['Cms.sitemap'], 'foo'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_1'], 'foo'));
+        $this->assertFalse(Auth::isAuthorized($publicActions['complex_2'], 'foo'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_3'], 'foobar'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_4'], 'bar'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_5'], 'bar'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_6'], 'bar'));
+        $this->assertFalse(Auth::isAuthorized($publicActions['complex_7'], 'bar'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_8'], 'bar'));
+        $this->assertTrue(Auth::isAuthorized($publicActions['complex_9'], 'bar'));
+        $this->assertFalse(Auth::isAuthorized($publicActions['complex_10'], 'bar'));
+    }
 
-        $enabled = Auth::userHasPermission([
-            'status' => 'active'
-        ], [
-            'status' => 'active'
-        ]);
+    public function testAuthForUserRights()
+    {
+        $userRights = [
+            'viewAllUsers' => [
+                'admin'
+            ],
+            'complex_1' => [
+                '*'
+            ],
+            'complex_2' => [
+                'foo',
+                'bar'
+            ],
+            'complex_3' => [
+                'role' => 'foo'
+            ],
+            'complex_4' => [
+                'foo.bar.baz' => 'foo'
+            ],
+        ];
 
-        $this->assertTrue($enabled);
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $userRights,
+                'viewAllUsers',
+                [
+                    'role' => 'admin'
+                ]
+            )
+        );
 
-        $enabled = Auth::userHasPermission([
-            'status' => 'inactive'
-        ], [
-            'status' => 'active'
-        ]);
+        $this->assertFalse(
+            Auth::isAuthorized(
+                $userRights,
+                'viewAllUsers',
+                [
+                    'role' => 'user'
+                ]
+            )
+        );
 
-        $this->assertFalse($enabled);
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $userRights,
+                'complex_1',
+                [
+                    'role' => 'user'
+                ]
+            )
+        );
 
-        $enabled = Auth::userHasPermission([
-            'status' => 'active',
-            'role' => 'foo'
-        ], [
-            'status' => 'active',
-            'role' => 'foo'
-        ]);
+        $this->assertFalse(
+            Auth::isAuthorized(
+                $userRights,
+                'complex_2',
+                [
+                    'role' => 'user'
+                ]
+            )
+        );
 
-        $this->assertTrue($enabled);
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $userRights,
+                'complex_3',
+                [
+                    'role' => 'foo'
+                ]
+            )
+        );
 
-        $enabled = Auth::userHasPermission([
-            'role' => 'foo'
-        ], [
-            'status' => 'active',
-            'role' => 'foo'
-        ]);
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $userRights,
+                'complex_4',
+                [
+                    'foo' => [
+                        'bar' => [
+                            'baz' => 'foo'
+                        ]
+                    ]
+                ]
+            )
+        );
+    }
 
-        $this->assertTrue($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foo'
-        ], [
-            'status' => 'active',
-            'role' => 'bar'
-        ]);
-
-        $this->assertFalse($enabled);
-
-        $enabled = Auth::userHasPermission([
-            'role' => 'foo',
-            'status' => 'bar'
-        ], [
-            'AND' => [
-                'role' => 'foo',
-                'status' => 'bar',
+    public function testAuthForAuthActions()
+    {
+        $authActions = [
+            'Admin.dashbaord' => [
+                '*' => ['admin'],
+                'info' => ['*'],
+                'my_info' => ['editor']
+            ],
+            'my_account' => [
+                '*' => ['*']
+            ],
+            'complex_1' => [
+                'foo' => [
+                    'AND' => [
+                        'role' => 'admin',
+                        'age' => 12,
+                        'gender.sex' => 'female'
+                    ]
+                ]
+            ],
+            'complex_2' => [
+                'foo' => [
+                    'OR' => [
+                        'AND' => [
+                            'role' => 'admin',
+                            'age' => 12,
+                            'gender.sex' => 'male'
+                        ],
+                        'gender.sex' => 'female'
+                    ]
+                ]
             ]
-        ]);
+        ];
 
-        $this->assertTrue($enabled);
+        $this->assertFalse(
+            Auth::isAuthorized(
+                $authActions['Admin.dashbaord'],
+                'my_info',
+                [
+                    'role' => 'foo'
+                ]
+            )
+        );
 
-        $enabled = Auth::userHasPermission([
-            'role' => 'foo',
-            'status' => 'foobar'
-        ], [
-            'AND' => [
-                'role' => 'foo',
-                'status' => 'bar',
-            ]
-        ]);
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $authActions['Admin.dashbaord'],
+                'info',
+                [
+                    'role' => 'foo'
+                ]
+            )
+        );
 
-        $this->assertFalse($enabled);
+        $this->assertFalse(
+            Auth::isAuthorized(
+                $authActions['Admin.dashbaord'],
+                'bar',
+                [
+                    'role' => 'foo'
+                ]
+            )
+        );
+
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $authActions['Admin.dashbaord'],
+                'my_info',
+                [
+                    'role' => 'editor'
+                ]
+            )
+        );
+
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $authActions['my_account'],
+                'my_info',
+                [
+                    'role' => 'editor'
+                ]
+            )
+        );
+
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $authActions['complex_1'],
+                'foo',
+                [
+                    'role' => 'admin',
+                    'age' => 12,
+                    'gender' => [
+                        'sex' => 'female'
+                    ]
+                ]
+            )
+        );
+
+        $this->assertFalse(
+            Auth::isAuthorized(
+                $authActions['complex_1'],
+                'bar',
+                [
+                    'role' => 'admin',
+                    'age' => 12,
+                    'gender' => [
+                        'sex' => 'female'
+                    ]
+                ]
+            )
+        );
+
+        $this->assertTrue(
+            Auth::isAuthorized(
+                $authActions['complex_2'],
+                'foo',
+                [
+                    'role' => 'admin',
+                    'age' => 12,
+                    'gender' => [
+                        'sex' => 'female'
+                    ]
+                ]
+            )
+        );
+
+        $this->assertFalse(
+            Auth::isAuthorized(
+                $authActions['complex_2'],
+                'foo',
+                [
+                    'role' => 'admin',
+                    'age' => 12,
+                    'gender' => [
+                        'sex' => 'apache attack helicopter'
+                    ]
+                ]
+            )
+        );
     }
 }

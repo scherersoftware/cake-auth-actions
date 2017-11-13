@@ -39,6 +39,6 @@ class UserRights
      */
     public function userHasRight(array $user, string $right): bool
     {
-        return Auth::userIsAuthorized($user, $this->_rightsConfig, $right);
+        return Auth::isAuthorized($this->_rightsConfig, $right, $user);
     }
 }

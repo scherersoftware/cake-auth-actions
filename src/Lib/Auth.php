@@ -11,15 +11,26 @@ class Auth
     protected const OPERATOR_OR = 'OR';
 
     /**
-     * @param array  $user       User data
-     * @param array  $config     Configuration
-     * @param string $permission Permissions
+     * Returns whether the permission is authorized with the given data.
+     *
+     * @param array      $config          Config
+     * @param string     $permission      Permission
+     * @param array|null $user            User
+     * @param string     $defaultOperator Default comparision operator
      * @return bool
      */
-    public static function userIsAuthorized(array $user, array $config, string $permission): bool
-    {
-        if (array_key_exists('*', $config)) {
-            $permission = '*';
+    public static function isAuthorized(
+        array $config,
+        string $permission,
+        array $user = null,
+        string $defaultOperator = self::OPERATOR_OR
+    ): bool {
+        if (!array_key_exists($permission, $config)) {
+            if (array_key_exists('*', $config)) {
+                $permission = '*';
+            } elseif (!in_array($permission, $config) && in_array('*', $config)) {
+                return true;
+            }
         }
 
         if (!array_key_exists($permission, $config) && in_array($permission, $config)) {
@@ -30,51 +41,18 @@ class Auth
             return false;
         }
 
-        if (!is_array($config[$permission])) {
-            return false;
+        $resolver = [__CLASS__, '_resolveValueForGlobal'];
+        if (is_array($user)) {
+            $resolver = function ($key, $value) use ($user) {
+                return self::_resolveValueForUser($user, $key, $value);
+            };
         }
 
-        return self::userHasPermission($user, $config[$permission]);
-    }
-
-    /**
-     * @param array $user   User data
-     * @param array $config Configuration
-     * @return bool
-     */
-    public static function userHasPermission(array $user, array $config): bool
-    {
-        $resolver = function ($key, $value) use ($user) {
-            return self::_resolveValueForUser($user, $key, $value);
-        };
-
-        return self::_resolve($config, $resolver, self:: OPERATOR_OR);
-    }
-
-    /**
-     * @param array  $config     Configuration
-     * @param string $permission Permission name
-     * @return bool
-     */
-    public static function isAuthorized(array $config, string $permission): bool
-    {
-        if (array_key_exists('*', $config)) {
-            $permission = '*';
+        if (is_array($config[$permission])) {
+            return self::_resolve($config[$permission], $resolver, $defaultOperator);
+        } else {
+            return $resolver($permission, $config[$permission]);
         }
-
-        if (!array_key_exists($permission, $config) && in_array($permission, $config)) {
-            return true;
-        }
-
-        if (!array_key_exists($permission, $config) && !in_array($permission, $config)) {
-            return false;
-        }
-
-        if (!is_array($config[$permission])) {
-            return self::_resolveValueForGlobal($permission, $config[$permission]);
-        }
-
-        return self::_resolve($config[$permission], [__CLASS__, '_resolveValueForGlobal'], self:: OPERATOR_OR);
     }
 
     /**
