@@ -132,6 +132,13 @@ class AuthActions
             $controller = Inflector::underscore($route['controller']);
         }
 
+        if (isset($route['prefix'])) {
+            $prefix = Inflector::camelize($route['prefix']);
+            if (!empty($prefix)) {
+                $controller = $prefix . '/' . $controller;
+            }
+        }
+
         $key = $controller;
         if (!empty($route['plugin'])) {
             $key = $route['plugin'] . '.' . $key;
