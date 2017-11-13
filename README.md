@@ -192,3 +192,11 @@ Following the example of a simple USER and ADMIN setup above, consider the follo
         'a' => function () {return true}; // callbacks are supported
 
         'personal_data.age' => '24' // Hash::get() accessors for user variables are supported if there is a user
+
+## TODO
+- [x] Fix auth library
+- [x] update readme
+- [ ] Move UserRights outside of AuthActionsTrait
+- [ ] Write remaining unit tests
+- [ ] Improve doc blocks
+- [ ] Migrate CookieComponent
