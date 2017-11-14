@@ -7,16 +7,9 @@ A simple, configuration based ACL alternative for CakePHP 3. Allows you to defin
 
 ## Installation
 
-#### 1. require the plugin in your `composer.json`
+#### 1. Require the plugin via composer
 
-		"require": {
-			"codekanzlei/cake-auth-actions": "dev-master"
-		}
-
-#### 2. Include the plugin using composer
-Open a terminal in your project-folder and run these commands:
-
-	$ composer update
+`$ composer require codekanzlei/cake-auth-actions`
 
 #### 3. Load the plugin in your `config/bootstrap.php`
 
