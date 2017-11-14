@@ -50,7 +50,10 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 
 **beforeFilter():**
 
-	public function beforeFilter(\Cake\Event\Event $event)
+	use Cake\Event\Event;
+	...
+
+	public function beforeFilter(Event $event)
 	{
 		$this->initAuthActions();
 	}
