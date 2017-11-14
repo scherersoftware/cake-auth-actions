@@ -23,7 +23,7 @@ In your `src/Controller/AppController.php`, insert the following pieces of code 
 
 **Traits:**
 
-	use \AuthActions\Lib\AuthActionsTrait;
+	use AuthActions\Lib\AuthActionsTrait;
 
 **$components:**
 
