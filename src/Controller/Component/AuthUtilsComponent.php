@@ -99,7 +99,7 @@ class AuthUtilsComponent extends Component
             return null;
         }
         if (!empty($tokenData['addRememberMeCookie']) && $tokenData['addRememberMeCookie']) {
-            $this->addRememberMeCookie($user->id);
+            $this->addRememberMeCookie((string)$user->id);
         }
         $userData = $user->toArray();
         $userData['user'] = $user;

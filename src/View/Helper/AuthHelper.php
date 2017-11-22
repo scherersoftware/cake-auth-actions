@@ -59,8 +59,9 @@ class AuthHelper extends Helper {
  * @return bool
  */
 	public function hasRight($right) {
-		if ($this->_viewAuth) {
-			return $this->_viewAuth['UserRights']->userHasRight($this->user(), $right);
+		$user = $this->user();
+		if ($this->_viewAuth && !is_null($user)) {
+			return $this->_viewAuth['UserRights']->userHasRight($user, $right);
 		}
 		return false;
 	}
