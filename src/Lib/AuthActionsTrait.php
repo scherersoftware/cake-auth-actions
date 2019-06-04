@@ -26,19 +26,19 @@ trait AuthActionsTrait
      */
     public function initAuthActions(): void
     {
-        EventManager::instance()->attach(function (\Cake\Event\Event $event): void {
+        EventManager::instance()->on(function (\Cake\Event\Event $event): void {
             // Make the AuthComponent, AuthActions and UserRights available to the view.
             // FIXME - find a clean way to do this
-            if (!$event->subject() instanceof \Cake\Controller\ErrorController) {
+            if (!$event->getSubject() instanceof \Cake\Controller\ErrorController) {
                 $viewAuthActions = [
-                    'AuthActions' => $event->subject()->getAuthActions(),
-                    'UserRights' => $event->subject()->getUserRights()
+                    'AuthActions' => $event->getSubject()->getAuthActions(),
+                    'UserRights' => $event->getSubject()->getUserRights()
                 ];
-                $event->subject()->set('viewAuthActions', $viewAuthActions);
+                $event->getSubject()->set('viewAuthActions', $viewAuthActions);
             }
         }, 'Controller.beforeRender');
 
-        if ($this->getAuthActions()->isPublicAction($this->request->params)) {
+        if ($this->getAuthActions()->isPublicAction($this->request->getAttribute('params'))) {
             $this->Auth->allow();
         }
     }
@@ -103,7 +103,7 @@ trait AuthActionsTrait
     {
         return $this->getAuthActions()->isAuthorized(
             $this->Auth->user(),
-            $this->request->params
+            $this->request->getAttribute('params')
         );
     }
 

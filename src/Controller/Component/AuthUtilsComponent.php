@@ -31,7 +31,7 @@ class AuthUtilsComponent extends Component
     ];
 
     /**
-     * Add a Remeber me cookie
+     * Add a Remember me cookie
      *
      * @param string $userId  UserID
      * @param string $options Options array for the cookie config
@@ -45,7 +45,7 @@ class AuthUtilsComponent extends Component
             'secure' => false
         ], $options);
 
-        $this->Cookie->config($options);
+        $this->Cookie->setConfig($options);
         $this->Cookie->write('User.id', $userId);
     }
 

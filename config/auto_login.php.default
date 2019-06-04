@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-$config = [
+return [
     'auto_login' => [
         'salt' => <SALT>
     ],

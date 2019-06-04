@@ -50,9 +50,9 @@ class Auth
 
         if (is_array($config[$permission])) {
             return self::_resolve($config[$permission], $resolver, $defaultOperator);
-        } else {
-            return $resolver($permission, $config[$permission]);
         }
+
+        return $resolver($permission, $config[$permission]);
     }
 
     /**

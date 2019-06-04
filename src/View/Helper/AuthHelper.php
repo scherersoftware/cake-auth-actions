@@ -41,7 +41,7 @@ class AuthHelper extends Helper
     public function loggedIn(): bool
     {
         if ($this->_viewAuth) {
-            return $this->sessionKey && $this->request->session()->check($this->sessionKey);
+            return $this->sessionKey && $this->request->getSession()->check($this->sessionKey);
         }
 
         return false;
@@ -55,8 +55,8 @@ class AuthHelper extends Helper
      */
     public function user(string $key = null)
     {
-        if ($this->sessionKey && $this->request->session()->check($this->sessionKey)) {
-            $user = $this->request->session()->read($this->sessionKey);
+        if ($this->sessionKey && $this->request->getSession()->check($this->sessionKey)) {
+            $user = $this->request->getSession()->read($this->sessionKey);
         } else {
             return null;
         }
