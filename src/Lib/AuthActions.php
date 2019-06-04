@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Lib;
 
 use Cake\Core\InstanceConfigTrait;
@@ -10,6 +9,7 @@ use Cake\Utility\Inflector;
 
 class AuthActions
 {
+
     use InstanceConfigTrait;
 
     /**
@@ -39,7 +39,7 @@ class AuthActions
      * @var array
      */
     protected $_defaultConfig = [
-        'camelizedControllerNames' => false
+        'camelizedControllerNames' => false,
     ];
 
     /**
@@ -94,7 +94,7 @@ class AuthActions
         if (is_array($url)) {
             // prevent plugin confusion
             $url = Hash::merge([
-                'plugin' => null
+                'plugin' => null,
             ], $url);
 
             $url = Router::url($url);

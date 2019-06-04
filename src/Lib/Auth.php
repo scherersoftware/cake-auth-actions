@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Lib;
 
 use Cake\Utility\Hash;

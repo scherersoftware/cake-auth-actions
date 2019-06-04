@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Controller\Component;
 
 use Cake\Controller\Component;
@@ -27,7 +26,7 @@ class AuthUtilsComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'defaultRedirect' => '/'
+        'defaultRedirect' => '/',
     ];
 
     /**
@@ -42,7 +41,7 @@ class AuthUtilsComponent extends Component
         $options = Hash::merge([
             'expires' => '+14 days',
             'httpOnly' => true,
-            'secure' => false
+            'secure' => false,
         ], $options);
 
         $this->Cookie->setConfig($options);

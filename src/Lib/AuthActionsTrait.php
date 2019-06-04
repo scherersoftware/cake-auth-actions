@@ -1,21 +1,21 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Lib;
 
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Event\EventManager;
 
 trait AuthActionsTrait
 {
 
     /**
-     * @var AuthActions
+     * @var \AuthActions\Lib\AuthActions
      */
     protected $_AuthActions;
 
     /**
-     * @var UserRights
+     * @var \AuthActions\Lib\UserRights
      */
     protected $_UserRights;
 
@@ -26,19 +26,19 @@ trait AuthActionsTrait
      */
     public function initAuthActions(): void
     {
-        EventManager::instance()->on(function (\Cake\Event\Event $event): void {
+        EventManager::instance()->on('Controller.beforeRender', function (Event $event): void {
             // Make the AuthComponent, AuthActions and UserRights available to the view.
             // FIXME - find a clean way to do this
             if (!$event->getSubject() instanceof \Cake\Controller\ErrorController) {
                 $viewAuthActions = [
                     'AuthActions' => $event->getSubject()->getAuthActions(),
-                    'UserRights' => $event->getSubject()->getUserRights()
+                    'UserRights' => $event->getSubject()->getUserRights(),
                 ];
                 $event->getSubject()->set('viewAuthActions', $viewAuthActions);
             }
-        }, 'Controller.beforeRender');
+        });
 
-        if ($this->getAuthActions()->isPublicAction($this->request->getAttribute('params'))) {
+        if ($this->getAuthActions()->isPublicAction($this->getRequest()->getAttribute('params'))) {
             $this->Auth->allow();
         }
     }

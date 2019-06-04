@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Test\TestModel\Entity;
 
 use AuthActions\Lib\AutoLoginTrait;
@@ -8,6 +7,7 @@ use Cake\ORM\Entity;
 
 class User extends Entity
 {
+
     use AutoLoginTrait;
 
     /**

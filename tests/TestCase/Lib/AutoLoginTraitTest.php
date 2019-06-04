@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Test\TestCase\Lib;
 
 use Cake\I18n\Time;
@@ -18,7 +17,7 @@ class AutoLoginTraitTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.auth_actions.users'
+        'plugin.auth_actions.users',
     ];
 
     /**
@@ -52,7 +51,7 @@ class AutoLoginTraitTest extends TestCase
 
         $url = [
             'controller' => 'Test',
-            'action' => 'test'
+            'action' => 'test',
         ];
 
         $mockDatetime = Time::now()->modify('-2 days');

@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\View\Helper;
 
 use Cake\Utility\Hash;
@@ -23,7 +22,7 @@ class AuthHelper extends Helper
     /**
      * Configures the instance
      *
-     * @param View  $View   CakePHP view object
+     * @param \Cake\View\View  $View   CakePHP view object
      * @param array $config helper config
      */
     public function __construct(View $View, array $config = [])

@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Lib;
 
 use Cake\Core\Configure;
@@ -82,7 +81,7 @@ trait AutoLoginTrait
             'url' => $redirectUrl,
             'timestamp' => Time::now()->toUnixString(),
             'expireInterval' => $expireInterval,
-            'addRememberMeCookie' => $addRememberMeCookie
+            'addRememberMeCookie' => $addRememberMeCookie,
         ];
         $serializedData = serialize($data);
         $token = Security::encrypt($serializedData, $this->getKey(), $this->getSalt());

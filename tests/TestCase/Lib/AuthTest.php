@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Test\TestCase\Lib;
 
 use AuthActions\Lib\Auth;
@@ -13,81 +12,81 @@ class AuthTest extends TestCase
         $publicActions = [
             'home' => [
                 'action_1',
-                'action_2'
+                'action_2',
             ],
             'pages' => ['*'],
             'Cms.sitemap' => ['*'],
             'complex_1' => [
                 '*' => function () {
                     return true;
-                }
+                },
             ],
             'complex_2' => [
                 '*' => function () {
                     return false;
-                }
+                },
             ],
             'complex_3' => [
                 '*' => function () {
                     return true;
                 },
                 'foo',
-                'bar'
+                'bar',
             ],
             'complex_4' => [
                 'foo',
                 'bar' => function () {
                     return true;
-                }
+                },
             ],
             'complex_5' => [
                 'foo',
-                'bar' => true
+                'bar' => true,
             ],
             'complex_6' => [
                 'foo',
                 'bar' => [
                     'AND' => [
                         'foo' => true,
-                        'baz' => true
-                    ]
-                ]
+                        'baz' => true,
+                    ],
+                ],
             ],
             'complex_7' => [
                 'foo',
                 'bar' => [
                     'AND' => [
                         'foo' => true,
-                        'baz' => false
-                    ]
-                ]
+                        'baz' => false,
+                    ],
+                ],
             ],
             'complex_8' => [
                 'foo',
                 'bar' => [
                     'OR' => [
                         'foo' => true,
-                        'baz' => false
-                    ]
-                ]
+                        'baz' => false,
+                    ],
+                ],
             ],
             'complex_9' => [
                 'foo',
                 'bar' => [
                     [
                         'foo' => true,
-                        'baz' => false
-                    ]
-                ]
+                        'baz' => false,
+                    ],
+                ],
             ],
             'complex_10' => [
                 'foo',
                 'bar' => [
                     [
                         'foo' => false,
-                        'baz' => false
-                    ]
-                ]
+                        'baz' => false,
+                    ],
+                ],
             ],
         ];
 
@@ -111,20 +110,20 @@ class AuthTest extends TestCase
     {
         $userRights = [
             'viewAllUsers' => [
-                'admin'
+                'admin',
             ],
             'complex_1' => [
-                '*'
+                '*',
             ],
             'complex_2' => [
                 'foo',
-                'bar'
+                'bar',
             ],
             'complex_3' => [
-                'role' => 'foo'
+                'role' => 'foo',
             ],
             'complex_4' => [
-                'foo.bar.baz' => 'foo'
+                'foo.bar.baz' => 'foo',
             ],
         ];
 
@@ -133,7 +132,7 @@ class AuthTest extends TestCase
                 $userRights,
                 'viewAllUsers',
                 [
-                    'role' => 'admin'
+                    'role' => 'admin',
                 ]
             )
         );
@@ -143,7 +142,7 @@ class AuthTest extends TestCase
                 $userRights,
                 'viewAllUsers',
                 [
-                    'role' => 'user'
+                    'role' => 'user',
                 ]
             )
         );
@@ -153,7 +152,7 @@ class AuthTest extends TestCase
                 $userRights,
                 'complex_1',
                 [
-                    'role' => 'user'
+                    'role' => 'user',
                 ]
             )
         );
@@ -163,7 +162,7 @@ class AuthTest extends TestCase
                 $userRights,
                 'complex_2',
                 [
-                    'role' => 'user'
+                    'role' => 'user',
                 ]
             )
         );
@@ -173,7 +172,7 @@ class AuthTest extends TestCase
                 $userRights,
                 'complex_3',
                 [
-                    'role' => 'foo'
+                    'role' => 'foo',
                 ]
             )
         );
@@ -185,9 +184,9 @@ class AuthTest extends TestCase
                 [
                     'foo' => [
                         'bar' => [
-                            'baz' => 'foo'
-                        ]
-                    ]
+                            'baz' => 'foo',
+                        ],
+                    ],
                 ]
             )
         );
@@ -199,19 +198,19 @@ class AuthTest extends TestCase
             'Admin.dashbaord' => [
                 '*' => ['admin'],
                 'info' => ['*'],
-                'my_info' => ['editor']
+                'my_info' => ['editor'],
             ],
             'my_account' => [
-                '*' => ['*']
+                '*' => ['*'],
             ],
             'complex_1' => [
                 'foo' => [
                     'AND' => [
                         'role' => 'admin',
                         'age' => 12,
-                        'gender.sex' => 'female'
-                    ]
-                ]
+                        'gender.sex' => 'female',
+                    ],
+                ],
             ],
             'complex_2' => [
                 'foo' => [
@@ -219,12 +218,12 @@ class AuthTest extends TestCase
                         'AND' => [
                             'role' => 'admin',
                             'age' => 12,
-                            'gender.sex' => 'male'
+                            'gender.sex' => 'male',
                         ],
-                        'gender.sex' => 'female'
-                    ]
-                ]
-            ]
+                        'gender.sex' => 'female',
+                    ],
+                ],
+            ],
         ];
 
         $this->assertFalse(
@@ -232,7 +231,7 @@ class AuthTest extends TestCase
                 $authActions['Admin.dashbaord'],
                 'my_info',
                 [
-                    'role' => 'foo'
+                    'role' => 'foo',
                 ]
             )
         );
@@ -242,7 +241,7 @@ class AuthTest extends TestCase
                 $authActions['Admin.dashbaord'],
                 'info',
                 [
-                    'role' => 'foo'
+                    'role' => 'foo',
                 ]
             )
         );
@@ -252,7 +251,7 @@ class AuthTest extends TestCase
                 $authActions['Admin.dashbaord'],
                 'bar',
                 [
-                    'role' => 'foo'
+                    'role' => 'foo',
                 ]
             )
         );
@@ -262,7 +261,7 @@ class AuthTest extends TestCase
                 $authActions['Admin.dashbaord'],
                 'my_info',
                 [
-                    'role' => 'editor'
+                    'role' => 'editor',
                 ]
             )
         );
@@ -272,7 +271,7 @@ class AuthTest extends TestCase
                 $authActions['my_account'],
                 'my_info',
                 [
-                    'role' => 'editor'
+                    'role' => 'editor',
                 ]
             )
         );
@@ -285,8 +284,8 @@ class AuthTest extends TestCase
                     'role' => 'admin',
                     'age' => 12,
                     'gender' => [
-                        'sex' => 'female'
-                    ]
+                        'sex' => 'female',
+                    ],
                 ]
             )
         );
@@ -299,8 +298,8 @@ class AuthTest extends TestCase
                     'role' => 'admin',
                     'age' => 12,
                     'gender' => [
-                        'sex' => 'female'
-                    ]
+                        'sex' => 'female',
+                    ],
                 ]
             )
         );
@@ -313,8 +312,8 @@ class AuthTest extends TestCase
                     'role' => 'admin',
                     'age' => 12,
                     'gender' => [
-                        'sex' => 'female'
-                    ]
+                        'sex' => 'female',
+                    ],
                 ]
             )
         );
@@ -327,8 +326,8 @@ class AuthTest extends TestCase
                     'role' => 'admin',
                     'age' => 12,
                     'gender' => [
-                        'sex' => 'apache attack helicopter'
-                    ]
+                        'sex' => 'apache attack helicopter',
+                    ],
                 ]
             )
         );

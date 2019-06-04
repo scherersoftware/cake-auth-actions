@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 namespace AuthActions\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
@@ -30,7 +29,7 @@ class UsersFixture extends TestFixture
         ],
         '_options' => [
             'engine' => 'InnoDB',
-            'collation' => 'utf8_general_ci'
+            'collation' => 'utf8_general_ci',
         ],
     ];
     // @codingStandardsIgnoreEnd

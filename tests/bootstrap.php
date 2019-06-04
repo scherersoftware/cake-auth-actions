@@ -1,7 +1,9 @@
 <?php
 declare(strict_types = 1);
+
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 
 Configure::write('debug', true);
 /**
@@ -18,13 +20,14 @@ $vendorPos = strpos(__DIR__, 'vendor/codekanzlei/cake-auth-actions');
 if ($vendorPos !== false) {
     // Package has been cloned within another composer package, resolve path to autoloader
     $vendorDir = substr(__DIR__, 0, $vendorPos) . 'vendor/';
-    $loader = require $vendorDir . 'autoload.php';
+    require $vendorDir . 'autoload.php';
 } else {
     // Package itself (cloned standalone)
-    $loader = require __DIR__ . '/../vendor/autoload.php';
+    require __DIR__ . '/../vendor/autoload.php';
 }
 require_once 'vendor/cakephp/cakephp/src/basics.php';
-Cake\Datasource\ConnectionManager::config('test', [
+
+ConnectionManager::setConfig('test', [
     'className' => 'Cake\Database\Connection',
     'driver' => 'Cake\Database\Driver\Mysql',
     'persistent' => false,
@@ -33,7 +36,7 @@ Cake\Datasource\ConnectionManager::config('test', [
     'password' => '',
     'database' => 'auth_actions_test',
     'encoding' => 'utf8',
-    'timezone' => 'UTC'
+    'timezone' => 'UTC',
 ]);
 
 Cache::setConfig('_cake_core_', [
@@ -45,5 +48,5 @@ Cache::setConfig('_cake_core_', [
 ]);
 
 Configure::write('auto_login', [
-    'salt' => 'foobar1234foobar1234foobar1234foobar1234foobar1234'
+    'salt' => 'foobar1234foobar1234foobar1234foobar1234foobar1234',
 ]);
