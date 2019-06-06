@@ -17,7 +17,7 @@ class AutoLoginTraitTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.auth_actions.users',
+        'plugin.AuthActions.Users',
     ];
 
     /**
@@ -28,7 +28,7 @@ class AutoLoginTraitTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->UsersTable = TableRegistry::get('Users');
+        $this->UsersTable = TableRegistry::getTableLocator()->get('Users');
         $this->UsersTable->setEntityClass('AuthActions\Test\TestModel\Entity\User');
     }
 
@@ -40,7 +40,7 @@ class AutoLoginTraitTest extends TestCase
     public function tearDown(): void
     {
         unset($this->UsersTable);
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         parent::tearDown();
     }
 
