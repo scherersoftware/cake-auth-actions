@@ -3,6 +3,8 @@ declare(strict_types = 1);
 namespace AuthActions\Lib;
 
 use Cake\Core\InstanceConfigTrait;
+use Cake\Http\ServerRequest;
+use Cake\Network\Request;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -101,7 +103,8 @@ class AuthActions
             // strip off the base path
             $url = Router::normalize($url);
         }
-        $route = Router::parse($url);
+        $mockRequest = new ServerRequest($url);
+        $route = Router::parseRequest($mockRequest);
         if (empty($route['controller']) || empty($route['action'])) {
             return false;
         }

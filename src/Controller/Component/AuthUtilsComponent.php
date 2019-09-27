@@ -59,7 +59,7 @@ class AuthUtilsComponent extends Component
     }
 
     /**
-     * Check if a remeber me cookie exists and login the user
+     * Check if a remember me cookie exists and login the user
      *
      * @return null|string
      */
