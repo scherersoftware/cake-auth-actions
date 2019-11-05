@@ -74,8 +74,8 @@ class AuthUtilsComponent extends Component
      */
     public function checkRememberMeCookie()
     {
-        if ($this->loggedIn() === false &&
-            $this->getController()->getRequest()->getCookie($this->getConfig('name')) !== null
+        if ($this->loggedIn() === false
+            && $this->getController()->getRequest()->getCookie($this->getConfig('name')) !== null
         ) {
             return $this->getController()->getRequest()->getCookie($this->getConfig('name'));
         }
