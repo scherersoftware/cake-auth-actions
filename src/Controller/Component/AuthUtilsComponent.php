@@ -40,16 +40,18 @@ class AuthUtilsComponent extends Component
      */
     public function addRememberMeCookie(string $userId): void
     {
-        $this->getController()->response = $this->getController()->response
-            ->withCookie(new Cookie(
-                $this->getConfig('name'), // cookie name
-                $userId, // value
-                new DateTime($this->getConfig('expiresAt')), // expiration time
-                $this->getConfig('path'), // path
-                $this->getConfig('domain'), // domain
-                $this->getConfig('secure'), // secure
-                $this->getConfig('httpOnly') // httponly
-            ));
+        $this->getController()->setResponse(
+            $this->getController()->getResponse()
+                ->withCookie(new Cookie(
+                    $this->getConfig('name'), // cookie name
+                    $userId, // value
+                    new DateTime($this->getConfig('expiresAt')), // expiration time
+                    $this->getConfig('path'), // path
+                    $this->getConfig('domain'), // domain
+                    $this->getConfig('secure'), // secure
+                    $this->getConfig('httpOnly') // httponly
+                ))
+        );
     }
 
     /**
@@ -59,8 +61,10 @@ class AuthUtilsComponent extends Component
      */
     public function destroyRememberMeCookie(): void
     {
-        $this->getController()->response = $this->getController()->response
-            ->withExpiredCookie($this->getConfig('name'));
+        $this->getController()->setResponse(
+            $this->getController()->getResponse()
+                ->withExpiredCookie($this->getConfig('name'))
+        );
     }
 
     /**
@@ -71,9 +75,9 @@ class AuthUtilsComponent extends Component
     public function checkRememberMeCookie()
     {
         if ($this->loggedIn() === false &&
-            $this->getController()->request->getCookie($this->getConfig('name')) !== null
+            $this->getController()->getRequest()->getCookie($this->getConfig('name')) !== null
         ) {
-            return $this->getController()->request->getCookie($this->getConfig('name'));
+            return $this->getController()->getRequest()->getCookie($this->getConfig('name'));
         }
 
         return false;

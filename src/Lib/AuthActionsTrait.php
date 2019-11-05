@@ -43,10 +43,10 @@ trait AuthActionsTrait
         );
 
         if ($this->getAuthActions()->isPublicAction(
-            $this->request->getParam('prefix', ''),
-            $this->request->getParam('plugin', ''),
-            $this->request->getParam('controller', ''),
-            $this->request->getParam('action', '')
+            $this->getRequest()->getParam('prefix', ''),
+            $this->getRequest()->getParam('plugin', ''),
+            $this->getRequest()->getParam('controller', ''),
+            $this->getRequest()->getParam('action', '')
         )
         ) {
             $this->Auth->allow();
@@ -114,10 +114,10 @@ trait AuthActionsTrait
     {
         return $this->getAuthActions()->isAuthorized(
             $this->Auth->user(),
-            $this->request->getParam('prefix', ''),
-            $this->request->getParam('plugin', ''),
-            $this->request->getParam('controller', ''),
-            $this->request->getParam('action', '')
+            $this->getRequest()->getParam('prefix', ''),
+            $this->getRequest()->getParam('plugin', ''),
+            $this->getRequest()->getParam('controller', ''),
+            $this->getRequest()->getParam('action', '')
         );
     }
 
