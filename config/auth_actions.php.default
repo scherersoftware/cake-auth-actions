@@ -1,27 +1,24 @@
 <?php
 // This is just a template file. Create a config with this format in our app/config directory
-$config = [
-	'public_actions' => [
-		// make action_1 and action_2 of HomeController public
-		'home' => [
-			'action_1', 'action_2'
-		],
-		// make all actions of PagesController public
-		'pages' => '*',
-		// make all actions of the Cms Plugin controller SitemapController public
-		'Cms.sitemap' => '*'
-	],
-	'auth_actions' => [
-		'Admin.dashbaord' => [
-			'*' => [ User::ROLE_ADMIN ],
-			'info' => '*',
-			'my_info' => [ User::ROLE_EDITOR ]
-		],
-		'my_account' => [
-			'*' => '*'
-		]
-	],
-	'auto_login' => [
-	    'salt' => 'YOUR_SALT_HERE'
-	]
+return [
+    'public_actions' => [
+        // make action_1 and action_2 of HomeController public
+        'home' => [
+            'action_1', 'action_2'
+        ],
+        // make all actions of PagesController public
+        'pages' => '*',
+        // make all actions of the Cms Plugin controller SitemapController public
+        'Cms.sitemap' => '*'
+    ],
+    'auth_actions' => [
+        'Admin.dashbaord' => [
+            '*' => [ User::ROLE_ADMIN ],
+            'info' => '*',
+            'my_info' => [ User::ROLE_EDITOR ]
+        ],
+        'my_account' => [
+            '*' => '*'
+        ]
+    ],
 ];
