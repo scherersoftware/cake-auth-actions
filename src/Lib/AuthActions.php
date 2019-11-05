@@ -92,10 +92,12 @@ class AuthActions
             if (isset($this->_rightsConfig[$key]['*']) && $this->_rightsConfig[$key]['*'] == '*') {
                 $isAuthorized = true;
             } elseif (isset($this->_rightsConfig[$key]['*'])
-            && in_array($user['role'], $this->_rightsConfig[$key]['*'])) {
+                && in_array($user['role'], $this->_rightsConfig[$key]['*'])
+            ) {
                 $isAuthorized = true;
             } elseif (isset($this->_rightsConfig[$key][$action])
-                && in_array($user['role'], $this->_rightsConfig[$key][$action])) {
+                && in_array($user['role'], $this->_rightsConfig[$key][$action])
+            ) {
                 $isAuthorized = true;
             }
         }
