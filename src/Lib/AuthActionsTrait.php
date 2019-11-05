@@ -47,8 +47,7 @@ trait AuthActionsTrait
             $this->getRequest()->getParam('plugin', ''),
             $this->getRequest()->getParam('controller', ''),
             $this->getRequest()->getParam('action', '')
-        )
-        ) {
+        )) {
             $this->Auth->allow();
         }
     }
