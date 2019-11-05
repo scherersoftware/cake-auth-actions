@@ -128,10 +128,10 @@ trait AuthActionsTrait
      */
     public function hasRight(string $right): bool
     {
-        if ($this->Auth->user() !== null) {
-            return $this->getUserRights()->userHasRight($this->Auth->user(), $right);
+        if ($this->Auth->user() === null) {
+            return false;
         }
 
-        return false;
+        return $this->getUserRights()->userHasRight($this->Auth->user(), $right);
     }
 }
