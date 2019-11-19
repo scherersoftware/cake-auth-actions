@@ -61,14 +61,20 @@ class AuthUtilsComponent extends Component
      */
     public function destroyRememberMeCookie(): void
     {
-        $this->getController()->setResponse(
-            $this->getController()
-                ->getResponse()
-                ->withExpiredCookie($this->getController()
-                    ->getRequest()
-                    ->getCookieCollection()
-                    ->get($this->getConfig('name')))
-        );
+        if ($this->getController()
+            ->getRequest()
+            ->getCookieCollection()
+            ->has($this->getConfig('name'))
+        ) {
+            $this->getController()->setResponse(
+                $this->getController()
+                    ->getResponse()
+                    ->withExpiredCookie($this->getController()
+                        ->getRequest()
+                        ->getCookieCollection()
+                        ->get($this->getConfig('name')))
+            );
+        }
     }
 
     /**
