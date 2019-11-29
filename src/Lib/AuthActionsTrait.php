@@ -9,7 +9,6 @@ use Cake\Event\EventManager;
 
 trait AuthActionsTrait
 {
-
     /**
      * @var \AuthActions\Lib\AuthActions
      */
@@ -42,12 +41,14 @@ trait AuthActionsTrait
             }
         );
 
-        if ($this->getAuthActions()->isPublicAction(
-            $this->getRequest()->getParam('prefix', ''),
-            $this->getRequest()->getParam('plugin', ''),
-            $this->getRequest()->getParam('controller', ''),
-            $this->getRequest()->getParam('action', '')
-        )) {
+        if (
+            $this->getAuthActions()->isPublicAction(
+                $this->getRequest()->getParam('prefix', ''),
+                $this->getRequest()->getParam('plugin', ''),
+                $this->getRequest()->getParam('controller', ''),
+                $this->getRequest()->getParam('action', '')
+            )
+        ) {
             $this->Auth->allow();
         }
     }

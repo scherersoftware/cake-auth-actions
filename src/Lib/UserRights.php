@@ -4,7 +4,6 @@ namespace AuthActions\Lib;
 
 class UserRights
 {
-
     /**
      * Holds the rights config.
      *

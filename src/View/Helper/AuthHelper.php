@@ -8,7 +8,6 @@ use Cake\View\View;
 
 class AuthHelper extends Helper
 {
-
     /**
      * Session key
      *

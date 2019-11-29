@@ -8,7 +8,6 @@ use Cake\Utility\Inflector;
 
 class AuthActions
 {
-
     /**
      * Holds the rights config.
      *
@@ -89,13 +88,18 @@ class AuthActions
                 $key = $plugin . '.' . $key;
             }
 
-            if (isset($this->_rightsConfig[$key]['*']) && $this->_rightsConfig[$key]['*'] == '*') {
+            if (
+                isset($this->_rightsConfig[$key]['*'])
+                && $this->_rightsConfig[$key]['*'] == '*'
+            ) {
                 $isAuthorized = true;
-            } elseif (isset($this->_rightsConfig[$key]['*'])
+            } elseif (
+                isset($this->_rightsConfig[$key]['*'])
                 && in_array($user['role'], $this->_rightsConfig[$key]['*'])
             ) {
                 $isAuthorized = true;
-            } elseif (isset($this->_rightsConfig[$key][$action])
+            } elseif (
+                isset($this->_rightsConfig[$key][$action])
                 && in_array($user['role'], $this->_rightsConfig[$key][$action])
             ) {
                 $isAuthorized = true;
@@ -137,7 +141,10 @@ class AuthActions
                 $isPublic = true;
             } elseif ($this->_publicActions[$key] === $action) {
                 $isPublic = true;
-            } elseif (is_array($this->_publicActions[$key]) && in_array($action, $this->_publicActions[$key])) {
+            } elseif (
+                is_array($this->_publicActions[$key])
+                && in_array($action, $this->_publicActions[$key])
+            ) {
                 $isPublic = true;
             }
         }
