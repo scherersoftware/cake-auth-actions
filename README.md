@@ -8,9 +8,9 @@ A simple, configuration based ACL alternative for CakePHP 4. Allows you to defin
 ## Installation
 
 #### 1. Install the plugin via composer
-
-    $ composer require codekanzlei/auth-actions
-
+```
+composer require codekanzlei/auth-actions
+```
 #### 2. Load the plugin in your `src/Application.php`
 
     $this->addPlugin('AuthActions');
@@ -84,13 +84,13 @@ In your project's `config` folder, create the required config files.
 See [4. Grant/Restrict group rights](#### 4. Grant/Restrict group rights) for further information and example code snippets.
 
 **auth_actions.php**
-
-    $ touch config/auth_actions.php
-
+```
+touch config/auth_actions.php
+```
 **user_rights.php**
-
-    $ touch config/user_rights.php
-
+```
+touch config/user_rights.php
+```
 #### 3. Define custom user roles
 
 Add a new column namend `role` to your database users table.
